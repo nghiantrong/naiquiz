@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+.layout {
+    min-height: 100vh;
+    background: #f8f8fc;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ── Navbar ──────────────────────────────────────────────── */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1.5px solid #e8e8f0;
+    height: 64px;
+}
+
+.navInner {
+    max-width: 1100px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+/* ── Logo ─────────────────────────────────────────────────── */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.logoText {
+    font-size: 20px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #4255ff, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.03em;
+}
+
+/* ── Nav links ───────────────────────────────────────────── */
+.navLinks {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+}
+
+.navLink {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b5563;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.navLink:hover {
+    background: #f0f2ff;
+    color: #4255ff;
+}
+
+.navLinkActive {
+    background: #eef0ff;
+    color: #4255ff;
+}
+
+/* ── Avatar ──────────────────────────────────────────────── */
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4255ff, #7c3aed);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: auto;
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+
+.avatar:hover {
+    transform: scale(1.08);
+}
+
+/* ── Page content ────────────────────────────────────────── */
+.content {
+    width: 100%;
+}

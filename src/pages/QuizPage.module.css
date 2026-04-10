@@ -1,0 +1,405 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ── Page layout ─────────────────────────────────────────── */
+.page {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(160deg, #f0f2ff 0%, #f9f0ff 50%, #f0f8ff 100%);
+    padding: 36px 20px 80px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.header {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    gap: 12px;
+}
+
+.headerMeta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sectionLabel {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7c3aed;
+}
+
+.questionCounter {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b5563;
+}
+
+/* ── Score badge ─────────────────────────────────────────── */
+.scoreBadge {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: #ffffff;
+    border: 1.5px solid #e8e8f0;
+    border-radius: 99px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.scoreBadgeCorrect {
+    color: #16a34a;
+}
+
+.scoreBadgeWrong {
+    color: #dc2626;
+}
+
+/* ── Progress bar ────────────────────────────────────────── */
+.progressTrack {
+    width: 100%;
+    max-width: 640px;
+    height: 6px;
+    border-radius: 99px;
+    background: #e8e8f0;
+    overflow: hidden;
+    margin-bottom: 28px;
+}
+
+.progressFill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, #4255ff, #7c3aed);
+    transition: width 0.5s ease;
+}
+
+/* ── Question card ───────────────────────────────────────── */
+.questionCard {
+    width: 100%;
+    max-width: 640px;
+    background: #ffffff;
+    border: 1.5px solid #e8e8f0;
+    border-radius: 20px;
+    box-shadow: 0 4px 32px rgba(66, 85, 255, 0.08);
+    padding: 36px 40px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.questionLabel {
+    margin: 0 0 12px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #b0b0c8;
+}
+
+.questionWord {
+    margin: 0;
+    font-size: clamp(20px, 4vw, 30px);
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.4;
+}
+
+/* ── Options grid ────────────────────────────────────────── */
+.options {
+    width: 100%;
+    max-width: 640px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 520px) {
+    .options {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Option button ───────────────────────────────────────── */
+.option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: 14px;
+    border: 2px solid #e8e8f0;
+    background: #ffffff;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.15s, background 0.15s, transform 0.12s, box-shadow 0.15s;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.option:hover:not(:disabled) {
+    border-color: #4255ff;
+    background: #f0f2ff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(66, 85, 255, 0.15);
+}
+
+.option:disabled {
+    cursor: not-allowed;
+}
+
+.optionLabel {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #f0f2ff;
+    color: #4255ff;
+    font-size: 13px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+}
+
+.optionText {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    line-height: 1.4;
+    flex: 1;
+}
+
+.optionIcon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Option states ───────────────────────────────────────── */
+.optionSelected {
+    border-color: #4255ff;
+    background: #f0f2ff;
+}
+
+.optionSelected .optionLabel {
+    background: #4255ff;
+    color: #ffffff;
+}
+
+.optionCorrect {
+    border-color: #16a34a !important;
+    background: #f0fdf4 !important;
+}
+
+.optionCorrect .optionLabel {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+.optionCorrect .optionText {
+    color: #15803d;
+    font-weight: 600;
+}
+
+.optionWrong {
+    border-color: #dc2626 !important;
+    background: #fef2f2 !important;
+}
+
+.optionWrong .optionLabel {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+.optionWrong .optionText {
+    color: #b91c1c;
+}
+
+.optionDim {
+    opacity: 0.45;
+}
+
+/* ── Feedback bar ────────────────────────────────────────── */
+.feedback {
+    width: 100%;
+    max-width: 640px;
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.feedbackCorrect {
+    background: #f0fdf4;
+    border: 2px solid #86efac;
+}
+
+.feedbackWrong {
+    background: #fef2f2;
+    border: 2px solid #fca5a5;
+}
+
+.feedbackContent {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.feedbackIcon {
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.feedbackTitle {
+    margin: 0 0 2px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a2e;
+}
+
+.feedbackSub {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* ── Next button ─────────────────────────────────────────── */
+.nextBtn {
+    flex-shrink: 0;
+    padding: 12px 28px;
+    border-radius: 99px;
+    border: none;
+    background: linear-gradient(135deg, #4255ff, #7c3aed);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(66, 85, 255, 0.3);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.nextBtn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 24px rgba(66, 85, 255, 0.45);
+}
+
+/* ── Keyboard hint ───────────────────────────────────────── */
+.keyboardHint {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #b0b0c8;
+}
+
+/* ══════════════════════════════════════════════════════════ */
+/* Result screen                                             */
+/* ══════════════════════════════════════════════════════════ */
+.resultCard {
+    width: 100%;
+    max-width: 480px;
+    background: #ffffff;
+    border: 1.5px solid #e8e8f0;
+    border-radius: 24px;
+    box-shadow: 0 8px 48px rgba(66, 85, 255, 0.12);
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+.resultTrophy {
+    color: #f59e0b;
+    margin-bottom: 4px;
+}
+
+.resultEmoji {
+    font-size: 40px;
+    margin: 0;
+    line-height: 1;
+}
+
+.resultTitle {
+    font-size: 22px;
+    font-weight: 800;
+    color: #1a1a2e;
+    margin: 8px 0 0;
+}
+
+.scoreCircle {
+    display: none; /* using SVG ring instead */
+}
+
+.scoreRingWrap {
+    width: 160px;
+    height: 160px;
+    margin: 16px 0;
+}
+
+.scoreRingSvg {
+    width: 100%;
+    height: 100%;
+}
+
+.scoreNumber {
+    font-size: 40px;
+    font-weight: 800;
+    color: #1a1a2e;
+}
+
+.scoreTotal {
+    font-size: 22px;
+    font-weight: 600;
+    color: #9ca3af;
+}
+
+.resultMessage {
+    font-size: 15px;
+    color: #6b7280;
+    margin: 0 0 16px;
+    line-height: 1.6;
+}
+
+.btnPrimary {
+    padding: 14px 40px;
+    border-radius: 99px;
+    border: none;
+    background: linear-gradient(135deg, #4255ff, #7c3aed);
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(66, 85, 255, 0.35);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btnPrimary:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 28px rgba(66, 85, 255, 0.45);
+}

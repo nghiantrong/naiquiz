@@ -1,0 +1,203 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+.page {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(160deg, #f0f2ff 0%, #f9f0ff 50%, #f0f8ff 100%);
+    padding: 40px 20px 60px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.header {
+    width: 100%;
+    max-width: 680px;
+    margin-bottom: 32px;
+}
+
+.headerTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.sectionLabel {
+    margin: 0 0 4px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7c3aed;
+}
+
+.title {
+    margin: 0;
+    font-size: clamp(20px, 4vw, 28px);
+    font-weight: 800;
+    color: #1a1a2e;
+    line-height: 1.2;
+}
+
+.cardCount {
+    background: #ffffff;
+    border: 1.5px solid #e8e8f0;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4255ff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ── Mode tabs ───────────────────────────────────────────── */
+.tabs {
+    display: flex;
+    gap: 4px;
+    margin-top: 20px;
+    border-bottom: 2px solid #e8e8f0;
+}
+
+.tab {
+    padding: 10px 18px;
+    border-radius: 8px 8px 0 0;
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.2s;
+    font-family: 'Inter', sans-serif;
+}
+
+.tab.activeTab {
+    background: #ffffff;
+    color: #4255ff;
+    font-weight: 700;
+    border-bottom-color: #4255ff;
+}
+
+.tab:hover:not(.activeTab) {
+    color: #4255ff;
+}
+
+/* ── Completion screen ───────────────────────────────────── */
+.completion {
+    width: 100%;
+    max-width: 680px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 32px rgba(66, 85, 255, 0.1);
+    border: 1.5px solid #e8e8f0;
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.completionEmoji {
+    font-size: 56px;
+    margin-bottom: 20px;
+}
+
+.completionTitle {
+    margin: 0 0 12px;
+    font-size: 28px;
+    font-weight: 800;
+    color: #1a1a2e;
+}
+
+.completionText {
+    margin: 0 0 32px;
+    font-size: 15px;
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+.completionHighlight {
+    color: #4255ff;
+    font-weight: 700;
+}
+
+.completionActions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btnPrimary {
+    padding: 14px 36px;
+    border-radius: 99px;
+    border: none;
+    background: linear-gradient(135deg, #4255ff, #7c3aed);
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(66, 85, 255, 0.35);
+    transition: transform 0.15s, box-shadow 0.15s;
+    font-family: 'Inter', sans-serif;
+}
+
+.btnPrimary:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 28px rgba(66, 85, 255, 0.45);
+}
+
+.btnOutline {
+    padding: 14px 36px;
+    border-radius: 99px;
+    border: 2px solid #4255ff;
+    background: #ffffff;
+    color: #4255ff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.15s;
+    font-family: 'Inter', sans-serif;
+}
+
+.btnOutline:hover {
+    background: #f0f2ff;
+    transform: scale(1.04);
+}
+
+/* ── Dot indicators ──────────────────────────────────────── */
+.dots {
+    display: flex;
+    gap: 6px;
+    margin-top: 28px;
+    align-items: center;
+}
+
+.dot {
+    height: 8px;
+    border-radius: 99px;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+    background: #e0e0ed;
+}
+
+.dot.dotActive {
+    width: 24px;
+    background: linear-gradient(90deg, #4255ff, #7c3aed);
+}
+
+.dot.dotPassed {
+    width: 8px;
+    background: #a5b4fc;
+}
+
+.dot.dotUpcoming {
+    width: 8px;
+    background: #e0e0ed;
+}
