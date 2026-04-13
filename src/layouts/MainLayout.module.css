@@ -76,7 +76,14 @@
     color: #4255ff;
 }
 
-/* ── Avatar ──────────────────────────────────────────────── */
+/* ── User menu (avatar + logout) ─────────────────────────── */
+.userMenu {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
 .avatar {
     width: 36px;
     height: 36px;
@@ -89,13 +96,29 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    margin-left: auto;
-    cursor: pointer;
-    transition: transform 0.15s;
+    cursor: default;
+    user-select: none;
 }
 
-.avatar:hover {
-    transform: scale(1.08);
+.logoutBtn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1.5px solid #e8e8f0;
+    background: #ffffff;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    flex-shrink: 0;
+}
+
+.logoutBtn:hover {
+    background: #fef2f2;
+    color: #dc2626;
+    border-color: #fca5a5;
 }
 
 /* ── Page content ────────────────────────────────────────── */
