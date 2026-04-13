@@ -49,6 +49,14 @@ const MainLayout = () => {
                             🃏 Thẻ ghi nhớ
                         </NavLink>
                         <NavLink
+                            to="/vocabs"
+                            className={({ isActive }) =>
+                                isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink
+                            }
+                        >
+                            📖 Từ vựng
+                        </NavLink>
+                        <NavLink
                             to="/quiz"
                             className={({ isActive }) =>
                                 isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink
