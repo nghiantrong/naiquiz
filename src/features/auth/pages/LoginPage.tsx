@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+﻿import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     loginWithEmail,
@@ -111,8 +111,8 @@ const LoginPage = () => {
                         <circle cx="16" cy="22" r="2.5" fill="white" />
                         <defs>
                             <linearGradient id="loginLogoGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-                                <stop stopColor="#4255ff" />
-                                <stop offset="1" stopColor="#7c3aed" />
+                                <stop stopColor="#6b9b6f" />
+                                <stop offset="1" stopColor="#3f6645" />
                             </linearGradient>
                         </defs>
                     </svg>

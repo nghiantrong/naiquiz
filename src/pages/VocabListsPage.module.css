@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 .page {
     min-height: calc(100vh - 64px);
@@ -24,7 +24,7 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #7c3aed;
+    color: #3f6645;
 }
 
 .title {
@@ -46,7 +46,7 @@
     background: #ffffff;
     border: 1.5px solid #e8e8f0;
     border-radius: 16px;
-    box-shadow: 0 2px 12px rgba(66, 85, 255, 0.06);
+    box-shadow: 0 2px 12px rgba(107, 155, 111, 0.06);
     overflow: hidden;
     transition: box-shadow 0.2s, transform 0.15s;
     display: flex;
@@ -54,7 +54,7 @@
 }
 
 .card:hover {
-    box-shadow: 0 6px 28px rgba(66, 85, 255, 0.14);
+    box-shadow: 0 6px 28px rgba(107, 155, 111, 0.14);
     transform: translateY(-2px);
 }
 
@@ -71,8 +71,8 @@
     width: 40px;
     height: 40px;
     border-radius: 10px;
-    background: linear-gradient(135deg, #eef0ff, #f5f0ff);
-    color: #4255ff;
+    background: linear-gradient(135deg, #eaf3eb, #f5f0ff);
+    color: #6b9b6f;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -109,8 +109,8 @@
     display: inline-block;
     font-size: 12px;
     font-weight: 600;
-    color: #4255ff;
-    background: #eef0ff;
+    color: #6b9b6f;
+    background: #eaf3eb;
     border-radius: 99px;
     padding: 2px 10px;
 }
@@ -139,9 +139,9 @@
 }
 
 .actionBtn:hover {
-    background: #eef0ff;
-    border-color: #c7caff;
-    color: #4255ff;
+    background: #eaf3eb;
+    border-color: #a8d4ac;
+    color: #6b9b6f;
 }
 
 .actionBtnDanger:hover {
@@ -282,9 +282,9 @@
 }
 
 .input:focus {
-    border-color: #4255ff;
+    border-color: #6b9b6f;
     background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(66, 85, 255, 0.12);
+    box-shadow: 0 0 0 3px rgba(107, 155, 111, 0.12);
 }
 
 .textarea { resize: vertical; }
@@ -297,20 +297,20 @@
     padding: 11px 22px;
     border-radius: 10px;
     border: none;
-    background: linear-gradient(135deg, #4255ff, #7c3aed);
+    background: linear-gradient(135deg, #6b9b6f, #3f6645);
     color: #ffffff;
     font-size: 14px;
     font-weight: 700;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
-    box-shadow: 0 4px 16px rgba(66, 85, 255, 0.30);
+    box-shadow: 0 4px 16px rgba(107, 155, 111, 0.30);
     transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
     white-space: nowrap;
 }
 
 .btnPrimary:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 6px 22px rgba(66, 85, 255, 0.40);
+    box-shadow: 0 6px 22px rgba(107, 155, 111, 0.40);
 }
 
 .btnPrimary:disabled { opacity: 0.65; cursor: not-allowed; }

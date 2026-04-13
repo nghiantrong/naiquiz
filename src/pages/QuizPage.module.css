@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 /* ── Page layout ─────────────────────────────────────────── */
 .page {
@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: linear-gradient(160deg, #f0f2ff 0%, #f9f0ff 50%, #f0f8ff 100%);
+    background: linear-gradient(160deg, #f0f5f0 0%, #edf8ee 50%, #f0f8f3 100%);
     padding: 36px 20px 80px;
     font-family: 'Inter', sans-serif;
 }
@@ -33,7 +33,7 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #7c3aed;
+    color: #3f6645;
 }
 
 .questionCounter {
@@ -77,7 +77,7 @@
 .progressFill {
     height: 100%;
     border-radius: 99px;
-    background: linear-gradient(90deg, #4255ff, #7c3aed);
+    background: linear-gradient(90deg, #6b9b6f, #3f6645);
     transition: width 0.5s ease;
 }
 
@@ -88,7 +88,7 @@
     background: #ffffff;
     border: 1.5px solid #e8e8f0;
     border-radius: 20px;
-    box-shadow: 0 4px 32px rgba(66, 85, 255, 0.08);
+    box-shadow: 0 4px 32px rgba(107, 155, 111, 0.08);
     padding: 36px 40px;
     margin-bottom: 24px;
     text-align: center;
@@ -144,10 +144,10 @@
 }
 
 .option:hover:not(:disabled) {
-    border-color: #4255ff;
-    background: #f0f2ff;
+    border-color: #6b9b6f;
+    background: #f0f5f0;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(66, 85, 255, 0.15);
+    box-shadow: 0 6px 20px rgba(107, 155, 111, 0.15);
 }
 
 .option:disabled {
@@ -159,8 +159,8 @@
     width: 32px;
     height: 32px;
     border-radius: 8px;
-    background: #f0f2ff;
-    color: #4255ff;
+    background: #f0f5f0;
+    color: #6b9b6f;
     font-size: 13px;
     font-weight: 800;
     display: flex;
@@ -186,12 +186,12 @@
 
 /* ── Option states ───────────────────────────────────────── */
 .optionSelected {
-    border-color: #4255ff;
-    background: #f0f2ff;
+    border-color: #6b9b6f;
+    background: #f0f5f0;
 }
 
 .optionSelected .optionLabel {
-    background: #4255ff;
+    background: #6b9b6f;
     color: #ffffff;
 }
 
@@ -287,19 +287,19 @@
     padding: 12px 28px;
     border-radius: 99px;
     border: none;
-    background: linear-gradient(135deg, #4255ff, #7c3aed);
+    background: linear-gradient(135deg, #6b9b6f, #3f6645);
     color: #ffffff;
     font-size: 14px;
     font-weight: 700;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
-    box-shadow: 0 4px 16px rgba(66, 85, 255, 0.3);
+    box-shadow: 0 4px 16px rgba(107, 155, 111, 0.3);
     transition: transform 0.15s, box-shadow 0.15s;
 }
 
 .nextBtn:hover {
     transform: scale(1.04);
-    box-shadow: 0 6px 24px rgba(66, 85, 255, 0.45);
+    box-shadow: 0 6px 24px rgba(107, 155, 111, 0.45);
 }
 
 /* ── Keyboard hint ───────────────────────────────────────── */
@@ -318,7 +318,7 @@
     background: #ffffff;
     border: 1.5px solid #e8e8f0;
     border-radius: 24px;
-    box-shadow: 0 8px 48px rgba(66, 85, 255, 0.12);
+    box-shadow: 0 8px 48px rgba(107, 155, 111, 0.12);
     padding: 48px 40px;
     display: flex;
     flex-direction: column;
@@ -389,17 +389,17 @@
     padding: 14px 40px;
     border-radius: 99px;
     border: none;
-    background: linear-gradient(135deg, #4255ff, #7c3aed);
+    background: linear-gradient(135deg, #6b9b6f, #3f6645);
     color: #ffffff;
     font-size: 15px;
     font-weight: 700;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
-    box-shadow: 0 4px 20px rgba(66, 85, 255, 0.35);
+    box-shadow: 0 4px 20px rgba(107, 155, 111, 0.35);
     transition: transform 0.15s, box-shadow 0.15s;
 }
 
 .btnPrimary:hover {
     transform: scale(1.04);
-    box-shadow: 0 6px 28px rgba(66, 85, 255, 0.45);
+    box-shadow: 0 6px 28px rgba(107, 155, 111, 0.45);
 }

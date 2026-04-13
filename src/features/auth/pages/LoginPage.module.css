@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 /* ── Full-page layout ────────────────────────────────────── */
 .page {
@@ -6,7 +6,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(160deg, #f0f2ff 0%, #f9f0ff 50%, #f0f8ff 100%);
+    background: linear-gradient(160deg, #f0f5f0 0%, #edf8ee 50%, #f0f8f3 100%);
     padding: 24px 16px;
     font-family: 'Inter', sans-serif;
     position: relative;
@@ -21,7 +21,7 @@
     width: 400px;
     height: 400px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(66, 85, 255, 0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(107, 155, 111, 0.12) 0%, transparent 70%);
     pointer-events: none;
 }
 
@@ -32,7 +32,7 @@
     width: 360px;
     height: 360px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(124, 58, 237, 0.10) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(63, 102, 69, 0.10) 0%, transparent 70%);
     pointer-events: none;
 }
 
@@ -45,7 +45,7 @@
     background: #ffffff;
     border: 1.5px solid #e8e8f0;
     border-radius: 24px;
-    box-shadow: 0 8px 48px rgba(66, 85, 255, 0.10), 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 8px 48px rgba(107, 155, 111, 0.10), 0 2px 8px rgba(0, 0, 0, 0.06);
     padding: 40px 36px 36px;
     display: flex;
     flex-direction: column;
@@ -69,7 +69,7 @@
 .logoText {
     font-size: 22px;
     font-weight: 800;
-    background: linear-gradient(135deg, #4255ff, #7c3aed);
+    background: linear-gradient(135deg, #6b9b6f, #3f6645);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -183,9 +183,9 @@
 }
 
 .input:focus {
-    border-color: #4255ff;
+    border-color: #6b9b6f;
     background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(66, 85, 255, 0.12);
+    box-shadow: 0 0 0 3px rgba(107, 155, 111, 0.12);
 }
 
 /* ── Password with eye toggle ────────────────────────────── */
@@ -215,7 +215,7 @@
 }
 
 .eyeBtn:hover {
-    color: #4255ff;
+    color: #6b9b6f;
 }
 
 /* ── Error box ───────────────────────────────────────────── */
@@ -243,13 +243,13 @@
     padding: 13px;
     border-radius: 12px;
     border: none;
-    background: linear-gradient(135deg, #4255ff, #7c3aed);
+    background: linear-gradient(135deg, #6b9b6f, #3f6645);
     color: #ffffff;
     font-size: 15px;
     font-weight: 700;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
-    box-shadow: 0 4px 20px rgba(66, 85, 255, 0.35);
+    box-shadow: 0 4px 20px rgba(107, 155, 111, 0.35);
     transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
     display: flex;
     align-items: center;
@@ -260,7 +260,7 @@
 
 .submitBtn:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 6px 28px rgba(66, 85, 255, 0.45);
+    box-shadow: 0 6px 28px rgba(107, 155, 111, 0.45);
 }
 
 .submitBtn:disabled {
@@ -298,13 +298,13 @@
     cursor: pointer;
     font-size: 13px;
     font-weight: 700;
-    color: #4255ff;
+    color: #6b9b6f;
     font-family: 'Inter', sans-serif;
     padding: 0;
     transition: color 0.15s;
 }
 
 .switchBtn:hover {
-    color: #7c3aed;
+    color: #3f6645;
     text-decoration: underline;
 }

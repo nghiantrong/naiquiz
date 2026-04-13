@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 .layout {
     min-height: 100vh;
@@ -40,7 +40,7 @@
 .logoText {
     font-size: 20px;
     font-weight: 800;
-    background: linear-gradient(135deg, #4255ff, #7c3aed);
+    background: linear-gradient(135deg, #6b9b6f, #3f6645);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -67,13 +67,13 @@
 }
 
 .navLink:hover {
-    background: #f0f2ff;
-    color: #4255ff;
+    background: #f0f5f0;
+    color: #6b9b6f;
 }
 
 .navLinkActive {
-    background: #eef0ff;
-    color: #4255ff;
+    background: #eaf3eb;
+    color: #6b9b6f;
 }
 
 /* ── User menu (avatar + logout) ─────────────────────────── */
@@ -88,7 +88,7 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #4255ff, #7c3aed);
+    background: linear-gradient(135deg, #6b9b6f, #3f6645);
     color: #ffffff;
     font-size: 14px;
     font-weight: 700;

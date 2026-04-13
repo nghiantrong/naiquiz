@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+﻿import { useState, useEffect, useCallback } from "react";
 import type { VocabWord } from "../features/vocabs/type";
 import styles from "./QuizPage.module.css";
 
@@ -120,8 +120,8 @@ const ResultScreen = ({ score, total, onRestart }: ResultScreenProps) => {
                     />
                     <defs>
                         <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stopColor="#4255ff" />
-                            <stop offset="100%" stopColor="#7c3aed" />
+                            <stop offset="0%" stopColor="#6b9b6f" />
+                            <stop offset="100%" stopColor="#3f6645" />
                         </linearGradient>
                     </defs>
                     <text x="60" y="55" textAnchor="middle" fill="#1a1a2e"

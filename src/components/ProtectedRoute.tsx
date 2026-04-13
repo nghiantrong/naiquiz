@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from "react-router-dom";
+﻿import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../features/auth/hooks/useAuth";
 
 const ProtectedRoute = () => {
@@ -11,13 +11,13 @@ const ProtectedRoute = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                background: "linear-gradient(160deg, #f0f2ff 0%, #f9f0ff 50%, #f0f8ff 100%)",
+                background: "linear-gradient(160deg, #f0f5f0 0%, #edf8ee 50%, #f0f8f3 100%)",
             }}>
                 <div style={{
                     width: 40,
                     height: 40,
                     border: "3.5px solid #e8e8f0",
-                    borderTopColor: "#4255ff",
+                    borderTopColor: "#6b9b6f",
                     borderRadius: "50%",
                     animation: "spin 0.7s linear infinite",
                 }} />

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 /* ── Wrapper ─────────────────────────────────────────────── */
 .wrapper {
@@ -19,7 +19,7 @@
 .progressLabel {
     font-size: 13px;
     font-weight: 600;
-    color: #4255ff;
+    color: #6b9b6f;
     min-width: 48px;
 }
 
@@ -34,7 +34,7 @@
 .progressFill {
     height: 100%;
     border-radius: 99px;
-    background: linear-gradient(90deg, #4255ff, #7c3aed);
+    background: linear-gradient(90deg, #6b9b6f, #3f6645);
     transition: width 0.4s ease;
 }
 
@@ -77,7 +77,7 @@
 /* ── Front face ──────────────────────────────────────────── */
 .front {
     background-color: #ffffff;
-    box-shadow: 0 4px 32px rgba(66, 85, 255, 0.1), 0 1.5px 6px rgba(0, 0, 0, 0.07);
+    box-shadow: 0 4px 32px rgba(107, 155, 111, 0.1), 0 1.5px 6px rgba(0, 0, 0, 0.07);
     border: 1.5px solid #e8e8f0;
     transform: translateZ(1px);
 }
@@ -134,8 +134,8 @@
 
 /* ── Back face ───────────────────────────────────────────── */
 .back {
-    background: linear-gradient(135deg, #4255ff 0%, #7c3aed 100%);
-    box-shadow: 0 8px 40px rgba(66, 85, 255, 0.3);
+    background: linear-gradient(135deg, #6b9b6f 0%, #3f6645 100%);
+    box-shadow: 0 8px 40px rgba(107, 155, 111, 0.3);
     transform: rotateY(180deg) translateZ(1px);
 }
 
@@ -171,13 +171,13 @@
     transition: all 0.2s ease;
     cursor: pointer;
     background: #ffffff;
-    border: 2px solid #4255ff;
-    color: #4255ff;
-    box-shadow: 0 2px 12px rgba(66, 85, 255, 0.18);
+    border: 2px solid #6b9b6f;
+    color: #6b9b6f;
+    box-shadow: 0 2px 12px rgba(107, 155, 111, 0.18);
 }
 
 .navBtn:hover:not(:disabled) {
-    background: #4255ff;
+    background: #6b9b6f;
     color: #ffffff;
     transform: scale(1.08);
 }
@@ -194,13 +194,13 @@
     padding: 12px 32px;
     border-radius: 99px;
     border: none;
-    background: linear-gradient(135deg, #4255ff, #7c3aed);
+    background: linear-gradient(135deg, #6b9b6f, #3f6645);
     color: #ffffff;
     font-size: 14px;
     font-weight: 700;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
-    box-shadow: 0 4px 20px rgba(66, 85, 255, 0.35);
+    box-shadow: 0 4px 20px rgba(107, 155, 111, 0.35);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     display: flex;
     align-items: center;
@@ -209,7 +209,7 @@
 
 .flipBtn:hover {
     transform: scale(1.04);
-    box-shadow: 0 6px 28px rgba(66, 85, 255, 0.45);
+    box-shadow: 0 6px 28px rgba(107, 155, 111, 0.45);
 }
 
 /* ── Keyboard hint ───────────────────────────────────────── */
