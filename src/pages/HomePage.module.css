@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 .page {
     min-height: calc(100vh - 64px);
@@ -8,6 +8,281 @@
     background: linear-gradient(160deg, #f0f5f0 0%, #edf8ee 50%, #f0f8f3 100%);
     padding: 40px 20px 60px;
     font-family: 'Inter', sans-serif;
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.header {
+    width: 100%;
+    max-width: 680px;
+    margin-bottom: 28px;
+}
+
+.headerTop {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.sectionLabel {
+    margin: 0 0 4px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #3f6645;
+}
+
+.title {
+    margin: 0;
+    font-size: clamp(18px, 4vw, 26px);
+    font-weight: 800;
+    color: #1a2e1c;
+    line-height: 1.2;
+}
+
+.cardCount {
+    background: #ffffff;
+    border: 1.5px solid #c3dbc6;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b9b6f;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+/* ── List chip selector ───────────────────────────────────── */
+.chipRow {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    border-radius: 99px;
+    border: 1.5px solid #c3dbc6;
+    background: #ffffff;
+    color: #4b6651;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.chip:hover {
+    border-color: #6b9b6f;
+    background: #f0f7f1;
+    color: #3f6645;
+}
+
+.chipActive {
+    background: linear-gradient(135deg, #6b9b6f, #3f6645);
+    border-color: transparent;
+    color: #ffffff;
+    box-shadow: 0 3px 12px rgba(107, 155, 111, 0.30);
+}
+
+.chipActive:hover {
+    background: linear-gradient(135deg, #6b9b6f, #3f6645);
+    color: #ffffff;
+}
+
+.chipName {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chipCount {
+    font-size: 11px;
+    font-weight: 700;
+    opacity: 0.75;
+    background: rgba(255,255,255,0.2);
+    border-radius: 99px;
+    padding: 1px 6px;
+}
+
+.chipActive .chipCount {
+    background: rgba(255,255,255,0.25);
+    opacity: 1;
+}
+
+/* ── States ──────────────────────────────────────────────── */
+.centerState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 60px 20px;
+    color: #7a9b80;
+    font-size: 14px;
+}
+
+.spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #c3dbc6;
+    border-top-color: #6b9b6f;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 60px 24px;
+    text-align: center;
+    max-width: 400px;
+}
+
+.emptyIcon { font-size: 52px; }
+
+.emptyTitle {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    color: #1a2e1c;
+}
+
+.emptyText {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #7a9b80;
+    line-height: 1.6;
+}
+
+/* ── Completion screen ───────────────────────────────────── */
+.completion {
+    width: 100%;
+    max-width: 680px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 32px rgba(107, 155, 111, 0.10);
+    border: 1.5px solid #c3dbc6;
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.completionEmoji {
+    font-size: 56px;
+    margin-bottom: 20px;
+}
+
+.completionTitle {
+    margin: 0 0 12px;
+    font-size: 28px;
+    font-weight: 800;
+    color: #1a2e1c;
+}
+
+.completionText {
+    margin: 0 0 32px;
+    font-size: 15px;
+    color: #7a9b80;
+    line-height: 1.6;
+}
+
+.completionHighlight {
+    color: #6b9b6f;
+    font-weight: 700;
+}
+
+.completionActions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btnPrimary {
+    padding: 13px 32px;
+    border-radius: 99px;
+    border: none;
+    background: linear-gradient(135deg, #6b9b6f, #3f6645);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(107, 155, 111, 0.35);
+    transition: transform 0.15s, box-shadow 0.15s;
+    font-family: 'Inter', sans-serif;
+}
+
+.btnPrimary:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 28px rgba(107, 155, 111, 0.45);
+}
+
+.btnOutline {
+    padding: 13px 32px;
+    border-radius: 99px;
+    border: 2px solid #c3dbc6;
+    background: #ffffff;
+    color: #3f6645;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.15s;
+    font-family: 'Inter', sans-serif;
+}
+
+.btnOutline:hover {
+    background: #f0f7f1;
+    border-color: #6b9b6f;
+    transform: scale(1.04);
+}
+
+/* ── Dot indicators ──────────────────────────────────────── */
+.dots {
+    display: flex;
+    gap: 6px;
+    margin-top: 28px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 680px;
+}
+
+.dot {
+    height: 8px;
+    border-radius: 99px;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.dot.dotActive {
+    width: 24px;
+    background: linear-gradient(90deg, #6b9b6f, #3f6645);
+}
+
+.dot.dotPassed {
+    width: 8px;
+    background: #a8d4ac;
+}
+
+.dot.dotUpcoming {
+    width: 8px;
+    background: #d4e8d6;
 }
 
 /* ── Header ──────────────────────────────────────────────── */
