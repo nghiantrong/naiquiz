@@ -4,6 +4,7 @@ import { useAuth } from "../features/auth/hooks/useAuth";
 import { useVocabWords } from "../features/vocabs/hooks/useVocabs";
 import type { VocabWord, CreateVocabWordInput } from "../features/vocabs/type";
 import { parseVocabText } from "../utils/parseVocabText";
+import FileImportModal from "../features/vocabs/components/FileImportModal";
 import styles from "./VocabDetailPage.module.css";
 
 /* ─── Icons ──────────────────────────────────────────────── */
@@ -212,6 +213,7 @@ const VocabDetailPage = () => {
 
     const [showAddModal, setShowAddModal] = useState(false);
     const [showImportModal, setShowImportModal] = useState(false);
+    const [showFileImportModal, setShowFileImportModal] = useState(false);
     const [editTarget, setEditTarget] = useState<VocabWord | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<VocabWord | null>(null);
     const [deleting, setDeleting] = useState(false);
@@ -250,9 +252,15 @@ const VocabDetailPage = () => {
                     <div className={styles.headerActions}>
                         <button
                             className={styles.btnOutline}
+                            onClick={() => setShowFileImportModal(true)}
+                        >
+                            📂 File
+                        </button>
+                        <button
+                            className={styles.btnOutline}
                             onClick={() => setShowImportModal(true)}
                         >
-                            <UploadIcon /> Import
+                            <UploadIcon /> Import text
                         </button>
                         <button className={styles.btnPrimary} onClick={() => setShowAddModal(true)}>
                             <PlusIcon /> Thêm từ
@@ -338,6 +346,14 @@ const VocabDetailPage = () => {
             )}
 
             {/* Modals */}
+            {/* File import modal */}
+            {showFileImportModal && (
+                <FileImportModal
+                    onConfirm={batchImport}
+                    onClose={() => setShowFileImportModal(false)}
+                />
+            )}
+
             {/* Import modal */}
             {showImportModal && (
                 <ImportModal

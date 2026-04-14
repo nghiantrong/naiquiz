@@ -1,0 +1,559 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ── Overlay ─────────────────────────────────────────────── */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 25, 15, 0.55);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── Modal ───────────────────────────────────────────────── */
+.modal {
+    background: #ffffff;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 860px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 24px 80px rgba(10, 25, 15, 0.22);
+    animation: slideUp 0.28s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(28px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 28px 18px;
+    border-bottom: 1px solid #e4ede5;
+    flex-shrink: 0;
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.headerIcon { font-size: 28px; line-height: 1; }
+
+.title {
+    margin: 0 0 2px;
+    font-size: 18px;
+    font-weight: 800;
+    color: #1a2e1c;
+    font-family: 'Inter', sans-serif;
+}
+
+.subtitle {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 600;
+    color: #7a9b80;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.closeBtn {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    border: 1.5px solid #e4ede5;
+    background: #f8fbf8;
+    color: #7a9b80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+}
+
+.closeBtn:hover { background: #fef2f2; color: #dc2626; border-color: #fca5a5; }
+
+/* ── Warning bar ─────────────────────────────────────────── */
+.warningBar {
+    background: #fefce8;
+    border-bottom: 1px solid #fde68a;
+    padding: 10px 28px;
+    font-size: 13px;
+    color: #713f12;
+    font-family: 'Inter', sans-serif;
+    flex-shrink: 0;
+}
+
+.warningBar a {
+    color: #a16207;
+    font-weight: 600;
+}
+
+.warningBar code {
+    background: #fde68a;
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 12px;
+}
+
+/* ── Dropzone ────────────────────────────────────────────── */
+.dropzone {
+    margin: 28px;
+    border: 2px dashed #c3dbc6;
+    border-radius: 18px;
+    padding: 52px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    background: #f8fbf8;
+    text-align: center;
+}
+
+.dropzone:hover {
+    border-color: #6b9b6f;
+    background: #f0f7f1;
+}
+
+.dropzoneDragging {
+    border-color: #6b9b6f;
+    border-style: solid;
+    background: #eaf3eb;
+    box-shadow: 0 0 0 4px rgba(107, 155, 111, 0.15);
+}
+
+.fileInput { display: none; }
+
+.dropzoneIcon {
+    color: #6b9b6f;
+    opacity: 0.65;
+    transition: opacity 0.2s, transform 0.2s;
+    margin-bottom: 4px;
+}
+
+.dropzone:hover .dropzoneIcon,
+.dropzoneDragging .dropzoneIcon {
+    opacity: 1;
+    transform: translateY(-4px);
+}
+
+.dropzoneTitle {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a2e1c;
+    font-family: 'Inter', sans-serif;
+}
+
+.dropzoneSub {
+    margin: 0;
+    font-size: 13px;
+    color: #7a9b80;
+    font-family: 'Inter', sans-serif;
+}
+
+.fileTypeBadges {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.badge {
+    padding: 4px 12px;
+    border-radius: 99px;
+    background: #eaf3eb;
+    border: 1px solid #c3dbc6;
+    color: #3f6645;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.04em;
+}
+
+.aiNote {
+    margin: 8px 0 0;
+    font-size: 12px;
+    color: #7a9b80;
+    font-family: 'Inter', sans-serif;
+    font-style: italic;
+}
+
+/* ── Analyzing state ─────────────────────────────────────── */
+.analyzingWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 56px 40px;
+}
+
+.analyzingRing {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.analyzingSpinner {
+    position: absolute;
+    inset: 0;
+    border: 4px solid #c3dbc6;
+    border-top-color: #6b9b6f;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+.analyzingEmoji {
+    font-size: 28px;
+    line-height: 1;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%       { transform: scale(1.1); opacity: 0.75; }
+}
+
+.analyzingTitle {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: #1a2e1c;
+    font-family: 'Inter', sans-serif;
+}
+
+.analyzingFile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #7a9b80;
+    font-family: 'Inter', sans-serif;
+}
+
+.fileBadge {
+    padding: 2px 8px;
+    border-radius: 99px;
+    background: #eaf3eb;
+    border: 1px solid #c3dbc6;
+    color: #3f6645;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.04em;
+}
+
+.fileSize {
+    color: #b3c9b6;
+    font-size: 12px;
+}
+
+.analyzingHint {
+    margin: 0;
+    font-size: 13px;
+    color: #b3c9b6;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    max-width: 340px;
+    line-height: 1.6;
+}
+
+/* ── Error state ─────────────────────────────────────────── */
+.errorWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 52px 40px;
+    text-align: center;
+}
+
+.errorIcon { font-size: 40px; }
+
+.errorTitle {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #b91c1c;
+    font-family: 'Inter', sans-serif;
+}
+
+.errorMsg {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #6b7280;
+    font-family: 'Inter', sans-serif;
+    max-width: 400px;
+    line-height: 1.6;
+}
+
+/* ── File bar ────────────────────────────────────────────── */
+.fileBar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 28px;
+    background: #f5faf5;
+    border-bottom: 1px solid #e4ede5;
+    flex-shrink: 0;
+}
+
+.fileName {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a2e1c;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.aiTag {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b9b6f;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+}
+
+.changeFileBtn {
+    background: none;
+    border: 1px solid #c3dbc6;
+    border-radius: 6px;
+    color: #3f6645;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.changeFileBtn:hover { background: #eaf3eb; }
+
+/* ── Review section ──────────────────────────────────────── */
+.reviewWrap {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 28px 0;
+}
+
+.reviewHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.reviewCount {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a2e1c;
+    font-family: 'Inter', sans-serif;
+}
+
+.reviewCountSub {
+    font-size: 13px;
+    font-weight: 400;
+    color: #9ca3af;
+}
+
+.addRowBtn {
+    background: none;
+    border: 1.5px dashed #c3dbc6;
+    border-radius: 8px;
+    color: #6b9b6f;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.addRowBtn:hover { background: #eaf3eb; border-color: #a8d4ac; }
+
+/* ── Word table ──────────────────────────────────────────── */
+.wordTable {
+    flex: 1;
+    overflow-y: auto;
+    border: 1.5px solid #e4ede5;
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.tableHead {
+    display: grid;
+    grid-template-columns: 36px 1fr 1fr 36px;
+    gap: 0;
+    background: #f5faf5;
+    border-bottom: 1px solid #e4ede5;
+    padding: 8px 12px;
+}
+
+.tableHead span {
+    font-size: 11px;
+    font-weight: 700;
+    color: #7a9b80;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-family: 'Inter', sans-serif;
+}
+
+.tableBody { overflow-y: auto; }
+
+.tableRow {
+    display: grid;
+    grid-template-columns: 36px 1fr 1fr 36px;
+    gap: 0;
+    align-items: center;
+    border-bottom: 1px solid #f0f5f0;
+    transition: background 0.1s;
+}
+
+.tableRow:last-child { border-bottom: none; }
+.tableRow:hover { background: #f8fbf8; }
+
+.tableRowInvalid { background: #fffbeb; }
+.tableRowInvalid:hover { background: #fef9c3; }
+
+.rowIdx {
+    font-size: 11px;
+    font-weight: 700;
+    color: #c3dbc6;
+    text-align: center;
+    padding: 10px 4px;
+    font-family: 'Inter', sans-serif;
+}
+
+.cellInput {
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-right: 1px solid #f0f5f0;
+    background: transparent;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    color: #1a2e1c;
+    outline: none;
+    transition: background 0.15s;
+}
+
+.tableRow:last-child .cellInput { border-right-color: #f0f5f0; }
+
+.cellInput:focus {
+    background: #f0f7f1;
+}
+
+.cellInput::placeholder { color: #c3dbc6; }
+
+.deleteRowBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: none;
+    color: #c3dbc6;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.deleteRowBtn:hover { color: #dc2626; background: #fef2f2; }
+
+/* ── Actions ─────────────────────────────────────────────── */
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 28px;
+    border-top: 1px solid #e4ede5;
+    flex-shrink: 0;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btnPrimary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 24px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #6b9b6f, #3f6645);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(107, 155, 111, 0.35);
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    min-height: 42px;
+    white-space: nowrap;
+}
+
+.btnPrimary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 22px rgba(107, 155, 111, 0.45);
+}
+
+.btnPrimary:disabled { opacity: 0.65; cursor: not-allowed; }
+
+.btnOutline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 20px;
+    border-radius: 10px;
+    border: 1.5px solid #c3dbc6;
+    background: #ffffff;
+    color: #3f6645;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+}
+
+.btnOutline:hover { background: #eaf3eb; border-color: #a8d4ac; }
+
+/* ── Spinner ─────────────────────────────────────────────── */
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
