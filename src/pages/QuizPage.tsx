@@ -1,30 +1,22 @@
-﻿import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import type { VocabWord } from "../features/vocabs/type";
+import { useAuth } from "../features/auth/hooks/useAuth";
+import { useVocabLists, useVocabWords } from "../features/vocabs/hooks/useVocabs";
+import { generateDistractors, isAiAvailable, type WordWithDistractors } from "../utils/aiQuizDistractors";
 import styles from "./QuizPage.module.css";
 
-/* ─── Mock data (sau này thay bằng API / store) ─────────── */
-const VOCAB_POOL: VocabWord[] = [
-    { id: "1", word: "Ephemeral", meaning: "Tồn tại trong thời gian ngắn; phù du" },
-    { id: "2", word: "Benevolent", meaning: "Nhân từ; tốt bụng; hào phóng" },
-    { id: "3", word: "Serendipity", meaning: "May mắn tình cờ; sự tình cờ thú vị" },
-    { id: "4", word: "Melancholy", meaning: "Buồn bã; u sầu sâu sắc" },
-    { id: "5", word: "Eloquent", meaning: "Hùng hồn; diễn đạt trôi chảy và thuyết phục" },
-    { id: "6", word: "Ambiguous", meaning: "Mơ hồ; có thể hiểu theo nhiều nghĩa" },
-    { id: "7", word: "Resilient", meaning: "Kiên cường; có khả năng phục hồi nhanh" },
-    { id: "8", word: "Meticulous", meaning: "Tỉ mỉ; cẩn thận đến từng chi tiết nhỏ" },
-    { id: "9", word: "Tenacious", meaning: "Kiên trì; bền bỉ không bỏ cuộc" },
-    { id: "10", word: "Profound", meaning: "Sâu sắc; có ý nghĩa lớn lao" },
-];
-
 const OPTION_LABELS = ["A", "B", "C", "D"] as const;
+const MIN_WORDS = 2; // minimum words needed to run quiz
 
 /* ─── Types ─────────────────────────────────────────────── */
 type AnswerState = "idle" | "correct" | "wrong";
+type PageState = "setup" | "generating" | "quiz" | "result";
 
 interface QuizQuestion {
     vocab: VocabWord;
-    options: string[];       // 4 meanings, shuffled
-    correctIndex: number;    // index of correct answer in options
+    options: string[];
+    correctIndex: number;
 }
 
 /* ─── Utilities ─────────────────────────────────────────── */
@@ -32,22 +24,14 @@ function shuffle<T>(arr: T[]): T[] {
     return [...arr].sort(() => Math.random() - 0.5);
 }
 
-function buildQuestions(pool: VocabWord[]): QuizQuestion[] {
-    return shuffle(pool).map((vocab) => {
-        const distractors = pool
-            .filter((v) => v.id !== vocab.id)
-            .map((v) => v.meaning);
-        const picked = shuffle(distractors).slice(0, 3);
-        const options = shuffle([vocab.meaning, ...picked]);
-        return {
-            vocab,
-            options,
-            correctIndex: options.indexOf(vocab.meaning),
-        };
+function buildQuestions(withDistractors: WordWithDistractors[]): QuizQuestion[] {
+    return shuffle(withDistractors).map(({ vocab, distractors }) => {
+        const options = shuffle([vocab.meaning, ...distractors]);
+        return { vocab, options, correctIndex: options.indexOf(vocab.meaning) };
     });
 }
 
-/* ─── Icon components ────────────────────────────────────── */
+/* ─── Icons ─────────────────────────────────────────────── */
 const CheckIcon = () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -58,31 +42,33 @@ const CheckIcon = () => (
 const CrossIcon = () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="18" y1="6" x2="6" y2="18" />
-        <line x1="6" y1="6" x2="18" y2="18" />
+        <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
     </svg>
 );
 
 const TrophyIcon = () => (
     <svg width="56" height="56" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M6 9H4a2 2 0 0 1-2-2V5h4" />
-        <path d="M18 9h2a2 2 0 0 0 2-2V5h-4" />
-        <path d="M6 9a6 6 0 0 0 12 0V3H6v6z" />
-        <path d="M12 15v3" />
-        <path d="M8 21h8" />
+        <path d="M6 9H4a2 2 0 0 1-2-2V5h4" /><path d="M18 9h2a2 2 0 0 0 2-2V5h-4" />
+        <path d="M6 9a6 6 0 0 0 12 0V3H6v6z" /><path d="M12 15v3" /><path d="M8 21h8" />
         <path d="M12 18a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z" />
     </svg>
 );
 
-/* ─── Result screen ──────────────────────────────────────── */
-interface ResultScreenProps {
-    score: number;
-    total: number;
-    onRestart: () => void;
-}
+/* ─── List chip ─────────────────────────────────────────── */
+const ListChip = ({ name, count, active, onClick }: {
+    name: string; count: number; active: boolean; onClick: () => void;
+}) => (
+    <button className={`${styles.chip} ${active ? styles.chipActive : ""}`} onClick={onClick}>
+        <span className={styles.chipName}>{name}</span>
+        <span className={styles.chipCount}>{count}</span>
+    </button>
+);
 
-const ResultScreen = ({ score, total, onRestart }: ResultScreenProps) => {
+/* ─── Result screen ─────────────────────────────────────── */
+const ResultScreen = ({ score, total, onRestart, onChangeList }: {
+    score: number; total: number; onRestart: () => void; onChangeList: () => void;
+}) => {
     const percent = Math.round((score / total) * 100);
     const getMessage = () => {
         if (percent === 100) return { emoji: "🏆", text: "Xuất sắc! Bạn trả lời đúng tất cả!" };
@@ -94,9 +80,7 @@ const ResultScreen = ({ score, total, onRestart }: ResultScreenProps) => {
 
     return (
         <div className={styles.resultCard}>
-            <div className={styles.resultTrophy}>
-                <TrophyIcon />
-            </div>
+            <div className={styles.resultTrophy}><TrophyIcon /></div>
             <p className={styles.resultEmoji}>{emoji}</p>
             <h2 className={styles.resultTitle}>Kết quả bài kiểm tra</h2>
 
@@ -105,14 +89,11 @@ const ResultScreen = ({ score, total, onRestart }: ResultScreenProps) => {
                 <span className={styles.scoreTotal}>/{total}</span>
             </div>
 
-            {/* Score ring */}
             <div className={styles.scoreRingWrap}>
                 <svg viewBox="0 0 120 120" className={styles.scoreRingSvg}>
                     <circle cx="60" cy="60" r="50" fill="none" stroke="#e8e8f0" strokeWidth="10" />
-                    <circle
-                        cx="60" cy="60" r="50" fill="none"
-                        stroke="url(#ringGrad)" strokeWidth="10"
-                        strokeLinecap="round"
+                    <circle cx="60" cy="60" r="50" fill="none"
+                        stroke="url(#ringGrad)" strokeWidth="10" strokeLinecap="round"
                         strokeDasharray={`${2 * Math.PI * 50}`}
                         strokeDashoffset={`${2 * Math.PI * 50 * (1 - percent / 100)}`}
                         transform="rotate(-90 60 60)"
@@ -124,11 +105,11 @@ const ResultScreen = ({ score, total, onRestart }: ResultScreenProps) => {
                             <stop offset="100%" stopColor="#3f6645" />
                         </linearGradient>
                     </defs>
-                    <text x="60" y="55" textAnchor="middle" fill="#1a1a2e"
+                    <text x="60" y="55" textAnchor="middle" fill="#1a2e1c"
                         fontSize="22" fontWeight="800" fontFamily="Inter,sans-serif">
                         {percent}%
                     </text>
-                    <text x="60" y="72" textAnchor="middle" fill="#b0b0c8"
+                    <text x="60" y="72" textAnchor="middle" fill="#b0c8b3"
                         fontSize="10" fontFamily="Inter,sans-serif">
                         độ chính xác
                     </text>
@@ -137,39 +118,71 @@ const ResultScreen = ({ score, total, onRestart }: ResultScreenProps) => {
 
             <p className={styles.resultMessage}>{text}</p>
 
-            <button className={styles.btnPrimary} onClick={onRestart}>
-                🔁 Làm lại bài kiểm tra
-            </button>
+            <div className={styles.resultActions}>
+                <button className={styles.btnPrimary} onClick={onRestart}>
+                    🔁 Làm lại bài kiểm tra
+                </button>
+                <button className={styles.btnOutline} onClick={onChangeList}>
+                    ← Chọn bộ từ khác
+                </button>
+            </div>
         </div>
     );
 };
 
-/* ─── Main Page ──────────────────────────────────────────── */
+/* ─── Main Page ─────────────────────────────────────────── */
 const QuizPage = () => {
+    const navigate = useNavigate();
+    const { user } = useAuth();
+
+    /* ── Data ── */
+    const { lists, loading: listsLoading } = useVocabLists(user?.uid);
+    const [selectedListId, setSelectedListId] = useState<string | null>(null);
+    const { words, loading: wordsLoading } = useVocabWords(user?.uid, selectedListId ?? undefined);
+
+    // Auto-select first list
+    useEffect(() => {
+        if (lists.length > 0 && !selectedListId) setSelectedListId(lists[0].id);
+    }, [lists, selectedListId]);
+
+    /* ── Quiz state ── */
+    const [pageState, setPageState] = useState<PageState>("setup");
     const [questions, setQuestions] = useState<QuizQuestion[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [answerState, setAnswerState] = useState<AnswerState>("idle");
     const [score, setScore] = useState(0);
-    const [finished, setFinished] = useState(false);
 
-    const initQuiz = useCallback(() => {
-        setQuestions(buildQuestions(VOCAB_POOL));
+    const selectedList = lists.find((l) => l.id === selectedListId);
+    const currentQuestion = questions[currentIndex];
+    const isAnswered = answerState !== "idle";
+    const progress = questions.length > 0 ? (currentIndex / questions.length) * 100 : 0;
+
+    /* ── Start quiz ── */
+    const startQuiz = useCallback(async (pool: VocabWord[]) => {
+        setPageState("generating");
+        const withDistractors = await generateDistractors(pool);
+        const qs = buildQuestions(withDistractors);
+        setQuestions(qs);
         setCurrentIndex(0);
         setSelectedIndex(null);
         setAnswerState("idle");
         setScore(0);
-        setFinished(false);
+        setPageState("quiz");
     }, []);
 
-    useEffect(() => {
-        initQuiz();
-    }, [initQuiz]);
+    const handleStart = () => {
+        if (words.length >= MIN_WORDS) startQuiz(words);
+    };
 
-    const currentQuestion = questions[currentIndex];
-    const isAnswered = answerState !== "idle";
-    const progress = questions.length > 0 ? ((currentIndex) / questions.length) * 100 : 0;
+    const handleRestart = () => startQuiz(words);
 
+    const handleChangeList = () => {
+        setPageState("setup");
+        setQuestions([]);
+    };
+
+    /* ── Answer ── */
     const handleSelect = (optionIndex: number) => {
         if (isAnswered || !currentQuestion) return;
 
@@ -184,7 +197,7 @@ const QuizPage = () => {
 
     const handleNext = () => {
         if (currentIndex + 1 >= questions.length) {
-            setFinished(true);
+            setPageState("result");
         } else {
             setCurrentIndex((i) => i + 1);
             setSelectedIndex(null);
@@ -192,10 +205,10 @@ const QuizPage = () => {
         }
     };
 
-    // Keyboard: 1-4 to select, Enter to go next
+    /* ── Keyboard ── */
     useEffect(() => {
+        if (pageState !== "quiz") return;
         const handleKey = (e: KeyboardEvent) => {
-            if (finished) return;
             if (!isAnswered) {
                 const map: Record<string, number> = { "1": 0, "2": 1, "3": 2, "4": 3 };
                 if (map[e.key] !== undefined) handleSelect(map[e.key]);
@@ -206,33 +219,145 @@ const QuizPage = () => {
         };
         window.addEventListener("keydown", handleKey);
         return () => window.removeEventListener("keydown", handleKey);
-    }, [isAnswered, finished, currentQuestion]);
+    }, [pageState, isAnswered, currentQuestion]);
 
     const getOptionClass = (i: number): string => {
-        if (!isAnswered) {
+        if (!isAnswered)
             return selectedIndex === i ? `${styles.option} ${styles.optionSelected}` : styles.option;
-        }
         if (i === currentQuestion.correctIndex) return `${styles.option} ${styles.optionCorrect}`;
         if (i === selectedIndex && i !== currentQuestion.correctIndex) return `${styles.option} ${styles.optionWrong}`;
         return `${styles.option} ${styles.optionDim}`;
     };
 
-    if (finished) {
-        return (
-            <main className={styles.page}>
-                <ResultScreen score={score} total={questions.length} onRestart={initQuiz} />
-            </main>
-        );
-    }
+    /* ══════════════════════════════════════ RENDER ══ */
 
-    if (questions.length === 0 || !currentQuestion) return null;
+    /* ── Loading lists ── */
+    if (listsLoading) return (
+        <main className={styles.page}>
+            <div className={styles.centerState}>
+                <div className={styles.spinner} />
+                <p>Đang tải...</p>
+            </div>
+        </main>
+    );
+
+    /* ── No lists ── */
+    if (!listsLoading && lists.length === 0) return (
+        <main className={styles.page}>
+            <div className={styles.emptyState}>
+                <div className={styles.emptyIcon}>📚</div>
+                <h1 className={styles.emptyTitle}>Chưa có bộ từ nào</h1>
+                <p className={styles.emptyText}>Tạo bộ từ vựng trước để bắt đầu kiểm tra.</p>
+                <button className={styles.btnPrimary} onClick={() => navigate("/vocabs")}>
+                    📝 Tạo bộ từ vựng
+                </button>
+            </div>
+        </main>
+    );
+
+    /* ── Result ── */
+    if (pageState === "result") return (
+        <main className={styles.page}>
+            <ResultScreen
+                score={score}
+                total={questions.length}
+                onRestart={handleRestart}
+                onChangeList={handleChangeList}
+            />
+        </main>
+    );
+
+    /* ── AI Generating ── */
+    if (pageState === "generating") return (
+        <main className={styles.page}>
+            <div className={styles.generatingWrap}>
+                <div className={styles.generatingRing}>
+                    <div className={styles.generatingSpinner} />
+                    <span className={styles.generatingEmoji}>🤖</span>
+                </div>
+                <h2 className={styles.generatingTitle}>AI đang tạo câu hỏi...</h2>
+                <p className={styles.generatingHint}>
+                    {isAiAvailable()
+                        ? "Gemini đang tạo các đáp án nhiễu thông minh cho bộ từ này."
+                        : "Đang xây dựng câu hỏi từ bộ từ..."}
+                </p>
+            </div>
+        </main>
+    );
+
+    /* ── Setup / List select ── */
+    if (pageState === "setup") return (
+        <main className={styles.page}>
+            <div className={styles.setupWrap}>
+                <div className={styles.setupHeader}>
+                    <p className={styles.sectionLabel}>✏️ Kiểm tra từ vựng</p>
+                    <h1 className={styles.setupTitle}>Chọn bộ từ để kiểm tra</h1>
+                    {isAiAvailable() && (
+                        <div className={styles.aiTag}>
+                            🤖 AI sẽ tạo đáp án nhiễu thông minh
+                        </div>
+                    )}
+                </div>
+
+                <div className={styles.chipRow}>
+                    {lists.map((l) => (
+                        <ListChip
+                            key={l.id}
+                            name={l.name}
+                            count={l.wordCount ?? 0}
+                            active={l.id === selectedListId}
+                            onClick={() => { setSelectedListId(l.id); setPageState("setup"); }}
+                        />
+                    ))}
+                </div>
+
+                {/* Selected list info */}
+                {selectedList && (
+                    <div className={styles.listPreview}>
+                        <div className={styles.listPreviewInfo}>
+                            <span className={styles.listPreviewName}>{selectedList.name}</span>
+                            <span className={styles.listPreviewCount}>
+                                {wordsLoading ? "..." : words.length} từ vựng
+                            </span>
+                        </div>
+
+                        {!wordsLoading && words.length < MIN_WORDS && (
+                            <p className={styles.listPreviewWarning}>
+                                ⚠️ Cần ít nhất {MIN_WORDS} từ để tạo bài kiểm tra.
+                                <button
+                                    className={styles.linkBtn}
+                                    onClick={() => navigate(`/vocab/${selectedListId}`)}
+                                >
+                                    Thêm từ →
+                                </button>
+                            </p>
+                        )}
+                    </div>
+                )}
+
+                <button
+                    className={styles.startBtn}
+                    onClick={handleStart}
+                    disabled={wordsLoading || words.length < MIN_WORDS}
+                >
+                    {wordsLoading
+                        ? <><span className={styles.spinnerInline} /> Đang tải...</>
+                        : `🚀 Bắt đầu kiểm tra (${words.length} câu)`
+                    }
+                </button>
+            </div>
+        </main>
+    );
+
+    /* ── Quiz ── */
+    if (!currentQuestion) return null;
 
     return (
         <main className={styles.page}>
             {/* Header */}
             <div className={styles.header}>
                 <div className={styles.headerMeta}>
-                    <span className={styles.sectionLabel}>✏️ Kiểm tra</span>
+                    <span className={styles.sectionLabel}>✏️ {selectedList?.name}</span>
                     <span className={styles.questionCounter}>
                         Câu {currentIndex + 1} / {questions.length}
                     </span>
@@ -252,7 +377,7 @@ const QuizPage = () => {
 
             {/* Question card */}
             <div className={styles.questionCard}>
-                <p className={styles.questionLabel}>Từ nào có nghĩa sau đây?</p>
+                <p className={styles.questionLabel}>Chọn nghĩa đúng của từ:</p>
                 <h2 className={styles.questionWord}>{currentQuestion.vocab.word}</h2>
             </div>
 
@@ -277,7 +402,7 @@ const QuizPage = () => {
                 ))}
             </div>
 
-            {/* Feedback + Next button */}
+            {/* Feedback */}
             {isAnswered && (
                 <div className={`${styles.feedback} ${answerState === "correct" ? styles.feedbackCorrect : styles.feedbackWrong}`}>
                     <div className={styles.feedbackContent}>
