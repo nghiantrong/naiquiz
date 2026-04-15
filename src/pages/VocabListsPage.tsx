@@ -112,7 +112,8 @@ const VocabListsPage = () => {
 
     return (
         <main className={styles.page}>
-            {/* Header */}
+            <div className={styles.pageInner}>
+                {/* Header */}
             <div className={styles.header}>
                 <div>
                     <p className={styles.sectionLabel}>📖 Từ vựng của tôi</p>
@@ -182,6 +183,7 @@ const VocabListsPage = () => {
                     ))}
                 </div>
             )}
+            </div>
 
             {/* Create modal */}
             {showCreateModal && (

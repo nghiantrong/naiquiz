@@ -238,6 +238,7 @@ const VocabDetailPage = () => {
 
     return (
         <main className={styles.page}>
+            <div className={styles.pageInner}>
             {/* Header */}
             <div className={styles.header}>
                 <button className={styles.backBtn} onClick={() => navigate("/vocabs")}>
@@ -344,6 +345,7 @@ const VocabDetailPage = () => {
                     <p>Không tìm thấy từ nào khớp với "<strong>{search}</strong>"</p>
                 </div>
             )}
+            </div>
 
             {/* Modals */}
             {/* File import modal */}

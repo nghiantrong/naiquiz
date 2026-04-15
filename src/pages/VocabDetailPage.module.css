@@ -1,11 +1,20 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 .page {
     min-height: calc(100vh - 64px);
-    max-width: 760px;
-    margin: 0 auto;
+    background: linear-gradient(160deg, #f0f5f0 0%, #edf8ee 50%, #f0f8f3 100%);
     padding: 32px 24px 80px;
     font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pageInner {
+    width: 100%;
+    max-width: 760px;
+    display: flex;
+    flex-direction: column;
 }
 
 /* ── Back button ─────────────────────────────────────────── */
@@ -25,7 +34,9 @@
     transition: color 0.15s;
 }
 
-.backBtn:hover { color: #6b9b6f; }
+.backBtn:hover {
+    color: #6b9b6f;
+}
 
 /* ── Header ──────────────────────────────────────────────── */
 .header {
@@ -207,9 +218,22 @@
     gap: 12px;
 }
 
-.emptyIcon { font-size: 48px; }
-.emptyTitle { margin: 0; font-size: 20px; font-weight: 700; color: #1a1a2e; }
-.emptyText  { margin: 0 0 8px; font-size: 14px; color: #6b7280; }
+.emptyIcon {
+    font-size: 48px;
+}
+
+.emptyTitle {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a2e;
+}
+
+.emptyText {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #6b7280;
+}
 
 .errorBox {
     background: #fef2f2;
@@ -234,7 +258,15 @@
     animation: fadeIn 0.2s ease;
 }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
 
 .modal {
     background: #ffffff;
@@ -247,8 +279,15 @@
 }
 
 @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px) scale(0.97); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .modalTitle {
@@ -265,12 +304,30 @@
     line-height: 1.6;
 }
 
-.modalForm { display: flex; flex-direction: column; gap: 16px; }
-.modalActions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 4px; }
+.modalForm {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
 
-.field { display: flex; flex-direction: column; gap: 6px; }
+.modalActions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 4px;
+}
 
-.label { font-size: 13px; font-weight: 600; color: #374151; }
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
 
 .input {
     padding: 10px 14px;
@@ -291,7 +348,9 @@
     box-shadow: 0 0 0 3px rgba(107, 155, 111, 0.12);
 }
 
-.textarea { resize: vertical; }
+.textarea {
+    resize: vertical;
+}
 
 /* ── Buttons ─────────────────────────────────────────────── */
 .btnPrimary {
@@ -318,7 +377,10 @@
     box-shadow: 0 6px 22px rgba(107, 155, 111, 0.40);
 }
 
-.btnPrimary:disabled { opacity: 0.65; cursor: not-allowed; }
+.btnPrimary:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
 
 .btnOutline {
     padding: 11px 22px;
@@ -333,7 +395,9 @@
     transition: background 0.15s;
 }
 
-.btnOutline:hover { background: #f5f5fa; }
+.btnOutline:hover {
+    background: #f5f5fa;
+}
 
 .btnDanger {
     display: inline-flex;
@@ -353,8 +417,14 @@
     min-width: 80px;
 }
 
-.btnDanger:hover:not(:disabled) { background: #b91c1c; }
-.btnDanger:disabled { opacity: 0.65; cursor: not-allowed; }
+.btnDanger:hover:not(:disabled) {
+    background: #b91c1c;
+}
+
+.btnDanger:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
 
 /* ── Spinners ────────────────────────────────────────────── */
 .spinner {
@@ -376,7 +446,11 @@
     animation: spin 0.7s linear infinite;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
 
 /* ── Header actions group ────────────────────────────────── */
 .headerActions {
@@ -403,7 +477,10 @@
     white-space: nowrap;
 }
 
-.btnOutline:hover { background: #f0f5f0; border-color: #a8d4ac; }
+.btnOutline:hover {
+    background: #f0f5f0;
+    border-color: #a8d4ac;
+}
 
 /* ── Import modal wide variant ───────────────────────────── */
 .modalWide {
@@ -419,7 +496,9 @@
 }
 
 @media (max-width: 600px) {
-    .importLayout { grid-template-columns: 1fr; }
+    .importLayout {
+        grid-template-columns: 1fr;
+    }
 }
 
 .importTextarea {
@@ -474,7 +553,9 @@
     font-size: 13px;
 }
 
-.previewRow:last-child { border-bottom: none; }
+.previewRow:last-child {
+    border-bottom: none;
+}
 
 .previewIndex {
     color: #b0b0c8;
