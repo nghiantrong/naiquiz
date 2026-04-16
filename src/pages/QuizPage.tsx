@@ -327,20 +327,10 @@ const QuizPage = () => {
             setAnswerState("idle");
 
             if (user?.uid && selectedListId) {
-                const currentScore = answerState === "correct" ? score + 1 : score;
-                // Note: score state hasn't updated yet for correct answers (setScore is async)
-                // We compute currentScore manually based on answerState
-                const actualScore = answerState === "correct"
-                    ? score  // score was already incremented by setScore(s => s+1) in handleSelect
-                    : score;
-
-                // Actually score reflects the value BEFORE the latest setScore(s=>s+1)
-                // handleSelect → setScore(s=>s+1) → re-render → nextIndex button click → handleNext
-                // At this point, score IS the updated value (since it's a new render)
                 const draftPayload: QuizDraft = {
                     listId: selectedListId,
                     listName: selectedList?.name ?? "",
-                    score: actualScore,
+                    score: score,
                     currentIndex: nextIndex,
                     total: questions.length,
                     questions: questions.map((q) => ({
