@@ -1,9 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import type { VocabWord } from "../features/vocabs/type";
 import { useAuth } from "../features/auth/hooks/useAuth";
 import { useVocabLists, useVocabWords } from "../features/vocabs/hooks/useVocabs";
 import { generateDistractors, isAiAvailable, type WordWithDistractors } from "../utils/aiQuizDistractors";
+import { saveDraft, loadDraft, deleteDraft, saveHistory } from "../features/quiz/services/quizService";
+import { useQuizHistory } from "../features/quiz/hooks/useQuizHistory";
+import type { QuizDraft } from "../features/quiz/types";
+import QuizHistoryPanel from "../features/quiz/components/QuizHistoryPanel";
 import styles from "./QuizPage.module.css";
 
 const OPTION_LABELS = ["A", "B", "C", "D"] as const;
@@ -31,6 +35,14 @@ function buildQuestions(withDistractors: WordWithDistractors[]): QuizQuestion[] 
     });
 }
 
+function deserializeQuestions(draft: QuizDraft): QuizQuestion[] {
+    return draft.questions.map((q) => ({
+        vocab: { id: "", word: q.word, meaning: q.meaning },
+        options: q.options,
+        correctIndex: q.correctIndex,
+    }));
+}
+
 /* ─── Icons ─────────────────────────────────────────────── */
 const CheckIcon = () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -55,6 +67,13 @@ const TrophyIcon = () => (
     </svg>
 );
 
+const BookmarkIcon = () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+    </svg>
+);
+
 /* ─── List chip ─────────────────────────────────────────── */
 const ListChip = ({ name, count, active, onClick }: {
     name: string; count: number; active: boolean; onClick: () => void;
@@ -64,6 +83,36 @@ const ListChip = ({ name, count, active, onClick }: {
         <span className={styles.chipCount}>{count}</span>
     </button>
 );
+
+/* ─── Resume Prompt ─────────────────────────────────────── */
+const ResumePrompt = ({ draft, onResume, onRestart }: {
+    draft: QuizDraft; onResume: () => void; onRestart: () => void;
+}) => {
+    const answered = draft.currentIndex;
+    const total = draft.total;
+    const percent = total > 0 ? Math.round((draft.score / answered || 0) * 100) : 0;
+
+    return (
+        <div className={styles.resumeCard}>
+            <div className={styles.resumeIcon}><BookmarkIcon /></div>
+            <div className={styles.resumeInfo}>
+                <p className={styles.resumeTitle}>Tiếp tục bài chưa hoàn thành?</p>
+                <p className={styles.resumeSub}>
+                    Câu {answered + 1}/{total} · Đúng: {draft.score}
+                    {answered > 0 && ` · ${percent}%`}
+                </p>
+            </div>
+            <div className={styles.resumeActions}>
+                <button className={styles.btnPrimarySmall} onClick={onResume}>
+                    ▶ Tiếp tục
+                </button>
+                <button className={styles.btnOutlineSmall} onClick={onRestart}>
+                    🔁 Làm lại
+                </button>
+            </div>
+        </div>
+    );
+};
 
 /* ─── Result screen ─────────────────────────────────────── */
 const ResultScreen = ({ score, total, onRestart, onChangeList }: {
@@ -123,7 +172,7 @@ const ResultScreen = ({ score, total, onRestart, onChangeList }: {
                     🔁 Làm lại bài kiểm tra
                 </button>
                 <button className={styles.btnOutline} onClick={onChangeList}>
-                    ← Chọn bộ từ khác
+                    ← Xem lịch sử / Chọn bộ từ khác
                 </button>
             </div>
         </div>
@@ -153,14 +202,37 @@ const QuizPage = () => {
     const [answerState, setAnswerState] = useState<AnswerState>("idle");
     const [score, setScore] = useState(0);
 
+    /* ── Draft state ── */
+    const [draft, setDraft] = useState<QuizDraft | null>(null);
+    const [draftLoading, setDraftLoading] = useState(false);
+    const startedAtRef = useRef<number>(0);
+
+    /* ── History ── */
+    const { history, loading: historyLoading, refetch: refetchHistory } =
+        useQuizHistory(user?.uid, selectedListId);
+
     const selectedList = lists.find((l) => l.id === selectedListId);
     const currentQuestion = questions[currentIndex];
     const isAnswered = answerState !== "idle";
     const progress = questions.length > 0 ? (currentIndex / questions.length) * 100 : 0;
 
-    /* ── Start quiz ── */
+    /* ── Load draft when list changes ── */
+    useEffect(() => {
+        if (!user?.uid || !selectedListId) {
+            setDraft(null);
+            return;
+        }
+        setDraftLoading(true);
+        loadDraft(user.uid, selectedListId)
+            .then(setDraft)
+            .catch(console.error)
+            .finally(() => setDraftLoading(false));
+    }, [user?.uid, selectedListId]);
+
+    /* ── Start quiz (fresh) ── */
     const startQuiz = useCallback(async (pool: VocabWord[]) => {
         setPageState("generating");
+        startedAtRef.current = Date.now();
         const withDistractors = await generateDistractors(pool);
         const qs = buildQuestions(withDistractors);
         setQuestions(qs);
@@ -172,14 +244,43 @@ const QuizPage = () => {
     }, []);
 
     const handleStart = () => {
-        if (words.length >= MIN_WORDS) startQuiz(words);
+        if (words.length >= MIN_WORDS) {
+            // Xóa draft cũ khi bắt đầu fresh
+            if (user?.uid && selectedListId && draft) {
+                deleteDraft(user.uid, selectedListId).catch(console.error);
+                setDraft(null);
+            }
+            startQuiz(words);
+        }
     };
 
-    const handleRestart = () => startQuiz(words);
+    /* ── Resume quiz từ draft ── */
+    const handleResume = () => {
+        if (!draft) return;
+        const resumed = deserializeQuestions(draft);
+        setQuestions(resumed);
+        setCurrentIndex(draft.currentIndex);
+        setScore(draft.score);
+        setSelectedIndex(null);
+        setAnswerState("idle");
+        startedAtRef.current = Date.now(); // track duration của phiên này
+        setDraft(null);
+        setPageState("quiz");
+    };
+
+    /* ── Restart (xóa draft + bắt đầu lại) ── */
+    const handleRestart = () => {
+        if (user?.uid && selectedListId) {
+            deleteDraft(user.uid, selectedListId).catch(console.error);
+        }
+        setDraft(null);
+        startQuiz(words);
+    };
 
     const handleChangeList = () => {
         setPageState("setup");
         setQuestions([]);
+        refetchHistory(); // refresh history khi quay lại setup
     };
 
     /* ── Answer ── */
@@ -196,12 +297,62 @@ const QuizPage = () => {
     };
 
     const handleNext = () => {
-        if (currentIndex + 1 >= questions.length) {
+        if (!currentQuestion) return;
+        const nextIndex = currentIndex + 1;
+
+        if (nextIndex >= questions.length) {
+            // ── Quiz hoàn thành ──
             setPageState("result");
+
+            if (user?.uid && selectedListId) {
+                const duration = Date.now() - startedAtRef.current;
+                const finalScore = answerState === "correct" ? score : score;
+                const percent = Math.round((finalScore / questions.length) * 100);
+
+                saveHistory(user.uid, {
+                    listId: selectedListId,
+                    listName: selectedList?.name ?? "",
+                    score: finalScore,
+                    total: questions.length,
+                    percent,
+                    duration,
+                }).catch(console.error);
+
+                deleteDraft(user.uid, selectedListId).catch(console.error);
+            }
         } else {
-            setCurrentIndex((i) => i + 1);
+            // ── Chuyển câu tiếp theo + save draft ──
+            setCurrentIndex(nextIndex);
             setSelectedIndex(null);
             setAnswerState("idle");
+
+            if (user?.uid && selectedListId) {
+                const currentScore = answerState === "correct" ? score + 1 : score;
+                // Note: score state hasn't updated yet for correct answers (setScore is async)
+                // We compute currentScore manually based on answerState
+                const actualScore = answerState === "correct"
+                    ? score  // score was already incremented by setScore(s => s+1) in handleSelect
+                    : score;
+
+                // Actually score reflects the value BEFORE the latest setScore(s=>s+1)
+                // handleSelect → setScore(s=>s+1) → re-render → nextIndex button click → handleNext
+                // At this point, score IS the updated value (since it's a new render)
+                const draftPayload: QuizDraft = {
+                    listId: selectedListId,
+                    listName: selectedList?.name ?? "",
+                    score: actualScore,
+                    currentIndex: nextIndex,
+                    total: questions.length,
+                    questions: questions.map((q) => ({
+                        word: q.vocab.word,
+                        meaning: q.vocab.meaning,
+                        options: q.options,
+                        correctIndex: q.correctIndex,
+                    })),
+                    startedAt: startedAtRef.current,
+                };
+                saveDraft(user.uid, draftPayload).catch(console.error);
+            }
         }
     };
 
@@ -219,7 +370,7 @@ const QuizPage = () => {
         };
         window.addEventListener("keydown", handleKey);
         return () => window.removeEventListener("keydown", handleKey);
-    }, [pageState, isAnswered, currentQuestion]);
+    }, [pageState, isAnswered, currentQuestion, score]);
 
     const getOptionClass = (i: number): string => {
         if (!isAnswered)
@@ -311,6 +462,18 @@ const QuizPage = () => {
                     ))}
                 </div>
 
+                {/* Resume prompt — hiện khi có draft */}
+                {!draftLoading && draft && (
+                    <ResumePrompt
+                        draft={draft}
+                        onResume={handleResume}
+                        onRestart={handleRestart}
+                    />
+                )}
+                {draftLoading && (
+                    <div className={styles.draftSkeleton} />
+                )}
+
                 {/* Selected list info */}
                 {selectedList && (
                     <div className={styles.listPreview}>
@@ -335,6 +498,9 @@ const QuizPage = () => {
                     </div>
                 )}
 
+                {/* History panel */}
+                <QuizHistoryPanel history={history} loading={historyLoading} />
+
                 <button
                     className={styles.startBtn}
                     onClick={handleStart}
@@ -342,7 +508,7 @@ const QuizPage = () => {
                 >
                     {wordsLoading
                         ? <><span className={styles.spinnerInline} /> Đang tải...</>
-                        : `🚀 Bắt đầu kiểm tra (${words.length} câu)`
+                        : `🚀 Bắt đầu kiểm tra${draft ? " mới" : ""} (${words.length} câu)`
                     }
                 </button>
             </div>

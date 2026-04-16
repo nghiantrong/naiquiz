@@ -720,3 +720,111 @@
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Resume Prompt ────────────────────────────────────────── */
+.resumeCard {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #eaf3eb, #f0f8f0);
+    border: 1.5px solid #a8d4ac;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-top: 12px;
+    animation: fadeSlideIn 0.3s ease;
+    flex-wrap: wrap;
+}
+
+.resumeIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #6b9b6f;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.resumeInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.resumeTitle {
+    margin: 0 0 2px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a2e1c;
+}
+
+.resumeSub {
+    margin: 0;
+    font-size: 12px;
+    color: #3f6645;
+}
+
+.resumeActions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.btnPrimarySmall {
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(135deg, #6b9b6f, #3f6645);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    white-space: nowrap;
+}
+
+.btnPrimarySmall:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(107, 155, 111, 0.35);
+}
+
+.btnOutlineSmall {
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 1.5px solid #a8d4ac;
+    background: #fff;
+    color: #3f6645;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+
+.btnOutlineSmall:hover {
+    background: #f0f8f0;
+}
+
+/* ── Draft skeleton ───────────────────────────────────────── */
+.draftSkeleton {
+    width: 100%;
+    height: 68px;
+    border-radius: 14px;
+    margin-top: 12px;
+    background: linear-gradient(90deg, #e8f0e9 25%, #ddeade 50%, #e8f0e9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s infinite;
+}
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}

@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, type DragEvent, type ChangeEvent } from "react";
 import { getFileType, ACCEPTED_EXTENSIONS } from "../../../utils/fileExtractor";
 import { aiExtractVocab, isGeminiConfigured } from "../../../utils/aiVocabExtractor";
+import { getFallbackModels } from "../../../utils/aiModelConfig";
 import type { CreateVocabWordInput } from "../../vocabs/type";
 import styles from "./FileImportModal.module.css";
 
@@ -203,7 +204,7 @@ const FileImportModal = ({ onConfirm, onClose }: FileImportModalProps) => {
                             </div>
                         )}
                         <p className={styles.analyzingHint}>
-                            Gemini 2.0 Flash đang đọc nội dung và tìm cặp từ vựng...
+                            {getFallbackModels()[0]} đang đọc nội dung và tìm cặp từ vựng...
                         </p>
                     </div>
                 )}
