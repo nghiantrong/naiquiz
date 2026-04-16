@@ -2,14 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { CreateVocabWordInput } from "../features/vocabs/type";
 import { getFileType, extractTextFromFile } from "./fileExtractor";
 
-/* ─── Model config ──────────────────────────────────────── */
-// Override model via VITE_GEMINI_MODEL env var if needed.
-// Common free-tier options (check your quota at https://ai.dev/rate-limit):
-//   "gemini-2.5-flash"       — stable alias, 500 RPD
-//   "gemini-2.5-flash-lite"  — faster, 500 RPD
-//   "gemini-1.5-flash"       — legacy fallback, 1500 RPD
-const MODEL: string =
-    (import.meta.env.VITE_GEMINI_MODEL as string | undefined) ?? "gemini-2.5-flash";
+import { getFallbackModels } from "./aiModelConfig";
 
 /* ─── Init ───────────────────────────────────────────────── */
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
@@ -85,23 +78,42 @@ export async function aiExtractVocab(file: File): Promise<CreateVocabWordInput[]
     }
 
     const genAI = new GoogleGenerativeAI(API_KEY);
-    const model = genAI.getGenerativeModel({ model: MODEL });
-
     const fileType = getFileType(file);
+    let pdfBase64: string | undefined;
+    let textContent: string | undefined;
+
+    // Load file content once
+    if (fileType === "pdf") {
+        pdfBase64 = await fileToBase64(file);
+    } else {
+        textContent = await extractTextFromFile(file);
+        if (!textContent.trim()) throw new Error("File trống hoặc không thể đọc nội dung.");
+    }
+
+    const modelsToTry = getFallbackModels();
     let result;
 
-    if (fileType === "pdf") {
-        // Send PDF directly — Gemini reads natively (up to ~20MB)
-        const base64 = await fileToBase64(file);
-        result = await model.generateContent([
-            { inlineData: { data: base64, mimeType: "application/pdf" } },
-            SYSTEM_PROMPT,
-        ]);
-    } else {
-        // Extract text first (DOCX / TXT), then send to Gemini
-        const text = await extractTextFromFile(file);
-        if (!text.trim()) throw new Error("File trống hoặc không thể đọc nội dung.");
-        result = await model.generateContent([text, SYSTEM_PROMPT]);
+    for (const modelName of modelsToTry) {
+        try {
+            console.log(`[VocabAI] Trying model: ${modelName}`);
+            const model = genAI.getGenerativeModel({ model: modelName });
+
+            if (fileType === "pdf") {
+                result = await model.generateContent([
+                    { inlineData: { data: pdfBase64!, mimeType: "application/pdf" } },
+                    SYSTEM_PROMPT,
+                ]);
+            } else {
+                result = await model.generateContent([textContent!, SYSTEM_PROMPT]);
+            }
+            break; // Success
+        } catch (err) {
+            console.warn(`[VocabAI] Model ${modelName} failed:`, err);
+        }
+    }
+
+    if (!result) {
+        throw new Error("Tất cả AI models đều đang quá tải hoặc tạm thời không khả dụng. Vui lòng thử lại sau.");
     }
 
     const responseText = result.response.text();

@@ -1,9 +1,9 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { VocabWord } from "../features/vocabs/type";
 
+import { getFallbackModels } from "./aiModelConfig";
+
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
-const MODEL: string =
-    (import.meta.env.VITE_GEMINI_MODEL as string | undefined) ?? "gemini-2.5-flash";
 
 export function isAiAvailable(): boolean {
     return !!API_KEY && API_KEY !== "your_gemini_api_key_here";
@@ -105,10 +105,26 @@ export async function generateDistractors(
 
     try {
         const genAI = new GoogleGenerativeAI(API_KEY);
-        const model = genAI.getGenerativeModel({ model: MODEL });
+        const modelsToTry = getFallbackModels();
+        const prompt = buildPrompt(words);
+        let raw = "";
 
-        const response = await model.generateContent(buildPrompt(words));
-        const raw = response.response.text();
+        for (const modelName of modelsToTry) {
+            try {
+                console.log(`[QuizAI] Trying model: ${modelName}`);
+                const model = genAI.getGenerativeModel({ model: modelName });
+                const response = await model.generateContent(prompt);
+                raw = response.response.text();
+                break; // Success!
+            } catch (err) {
+                console.warn(`[QuizAI] Model ${modelName} failed:`, err);
+            }
+        }
+
+        if (!raw) {
+            throw new Error("All AI models failed.");
+        }
+
         const distractorMap = parseResponse(raw, words);
 
         return words.map((vocab) => ({
