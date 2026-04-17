@@ -56,62 +56,211 @@
     flex-shrink: 0;
 }
 
-/* ── List chip selector ───────────────────────────────────── */
-.chipRow {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
+/* ── List Selector Dropdown ───────────────────────────────── */
+.dropdownWrap {
+    position: relative;
+    width: 100%;
+    margin-top: 8px;
 }
 
-.chip {
-    display: inline-flex;
+/* Invisible backdrop to close on outside click */
+.dropdownBackdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+}
+
+/* Trigger button (looks like a select input) */
+.dropdownTrigger {
+    width: 100%;
+    display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 7px 14px;
-    border-radius: 99px;
+    gap: 10px;
+    padding: 11px 16px;
+    border-radius: 14px;
     border: 1.5px solid #c3dbc6;
     background: #ffffff;
-    color: #4b6651;
-    font-size: 13px;
-    font-weight: 600;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
-    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
-    white-space: nowrap;
+    text-align: left;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+    z-index: 11;
 }
 
-.chip:hover { border-color: #6b9b6f; background: #f0f7f1; }
-
-.chipActive {
-    background: linear-gradient(135deg, #6b9b6f, #3f6645);
-    border-color: transparent;
-    color: #ffffff;
-    box-shadow: 0 3px 12px rgba(107, 155, 111, 0.30);
+.dropdownTrigger:hover,
+.dropdownTriggerOpen {
+    border-color: #6b9b6f;
+    box-shadow: 0 0 0 3px rgba(107, 155, 111, 0.1);
 }
 
-.chipActive:hover { background: linear-gradient(135deg, #6b9b6f, #3f6645); color: #ffffff; }
+.dropdownTriggerEmoji {
+    font-size: 18px;
+    flex-shrink: 0;
+}
 
-.chipName {
-    max-width: 140px;
+.dropdownTriggerLabel {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a2e1c;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.chipCount {
-    font-size: 11px;
-    font-weight: 700;
-    opacity: 0.7;
-    background: rgba(0,0,0,0.06);
+.dropdownTriggerCount {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b9b6f;
+    background: #edf7ee;
     border-radius: 99px;
-    padding: 1px 6px;
+    padding: 2px 8px;
+    flex-shrink: 0;
 }
 
-.chipActive .chipCount { background: rgba(255,255,255,0.2); opacity: 1; }
+.dropdownArrow {
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+}
 
-.chipProgress {
-    font-size: 9px;
+.dropdownArrowOpen {
+    transform: rotate(180deg);
+}
+
+/* Dropdown panel */
+.dropdownPanel {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 20;
+    background: #ffffff;
+    border: 1.5px solid #c3dbc6;
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    animation: dropdownIn 0.15s ease;
+}
+
+@keyframes dropdownIn {
+    from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Search box */
+.dropdownSearch {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f0f0f5;
+}
+
+.dropdownSearchInput {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1.5px solid #e0e0ed;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+    color: #1a1a2e;
+    background: #fafafa;
+    box-sizing: border-box;
+}
+
+.dropdownSearchInput:focus {
+    border-color: #6b9b6f;
+    background: #fff;
+}
+
+/* List of items */
+.dropdownList {
+    max-height: 280px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 6px 0;
+}
+
+.dropdownList::-webkit-scrollbar { width: 4px; }
+.dropdownList::-webkit-scrollbar-track { background: transparent; }
+.dropdownList::-webkit-scrollbar-thumb { background: #c3dbc6; border-radius: 99px; }
+
+/* Individual list item */
+.dropdownItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    text-align: left;
+    transition: background 0.1s;
+}
+
+.dropdownItem:hover {
+    background: #f0f7f1;
+}
+
+.dropdownItemActive {
+    background: linear-gradient(90deg, #edf7ee, #f5fbf5);
+}
+
+.dropdownItemNo {
+    font-size: 11px;
+    font-weight: 700;
+    color: #b0b0c8;
+    min-width: 18px;
+    text-align: right;
+}
+
+.dropdownItemName {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a2e1c;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dropdownItemCount {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9ca3af;
+    flex-shrink: 0;
+}
+
+.dropdownItemActive .dropdownItemName { color: #3f6645; }
+.dropdownItemActive .dropdownItemCount { color: #6b9b6f; }
+
+.dropdownItemCheck {
     color: #6b9b6f;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.dropdownEmpty {
+    padding: 16px;
+    text-align: center;
+    font-size: 13px;
+    color: #9ca3af;
+}
+
+/* Footer */
+.dropdownFooter {
+    padding: 8px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #b0b0c8;
+    border-top: 1px solid #f0f0f5;
+    letter-spacing: 0.03em;
 }
 
 /* ── States ──────────────────────────────────────────────── */

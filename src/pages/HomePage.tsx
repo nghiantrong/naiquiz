@@ -4,6 +4,7 @@ import Flashcard from "../features/vocabs/components/Flashcard";
 import { useAuth } from "../features/auth/hooks/useAuth";
 import { useVocabLists, useVocabWords } from "../features/vocabs/hooks/useVocabs";
 import type { VocabWord } from "../features/vocabs/type";
+import type { VocabList } from "../features/vocabs/type";
 import {
     saveFlashcardProgress,
     loadFlashcardProgress,
@@ -12,18 +13,106 @@ import {
 } from "../features/flashcard/services/flashcardService";
 import styles from "./HomePage.module.css";
 
-/* ─── List chip ──────────────────────────────────────────── */
-const ListChip = ({
-    name, count, active, onClick,
-}: { name: string; count: number; active: boolean; onClick: () => void }) => (
-    <button
-        className={`${styles.chip} ${active ? styles.chipActive : ""}`}
-        onClick={onClick}
-    >
-        <span className={styles.chipName}>{name}</span>
-        <span className={styles.chipCount}>{count}</span>
-    </button>
+/* ─── Icons ───────────────────────────────────────────────── */
+const ChevronDownIcon = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="6 9 12 15 18 9" />
+    </svg>
 );
+
+const CheckIcon = () => (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="20 6 9 17 4 12" />
+    </svg>
+);
+
+/* ─── List Selector Dropdown ─────────────────────────────────── */
+const ListSelector = ({
+    lists, selectedId, onSelect,
+}: {
+    lists: VocabList[];
+    selectedId: string | null;
+    onSelect: (id: string) => void;
+}) => {
+    const [open, setOpen] = useState(false);
+    const [search, setSearch] = useState("");
+    const selected = lists.find(l => l.id === selectedId);
+
+    const filtered = search.trim()
+        ? lists.filter(l => l.name.toLowerCase().includes(search.toLowerCase()))
+        : lists;
+
+    return (
+        <div className={styles.dropdownWrap}>
+            {/* Backdrop — click outside to close */}
+            {open && <div className={styles.dropdownBackdrop} onClick={() => { setOpen(false); setSearch(""); }} />}
+
+            {/* Trigger button */}
+            <button
+                className={`${styles.dropdownTrigger} ${open ? styles.dropdownTriggerOpen : ""}`}
+                onClick={() => setOpen(o => !o)}
+            >
+                <span className={styles.dropdownTriggerEmoji}>📖</span>
+                <span className={styles.dropdownTriggerLabel}>
+                    {selected?.name ?? "Chọn bộ từ để học..."}
+                </span>
+                {selected && (
+                    <span className={styles.dropdownTriggerCount}>{selected.wordCount ?? 0} từ</span>
+                )}
+                <span className={`${styles.dropdownArrow} ${open ? styles.dropdownArrowOpen : ""}`}>
+                    <ChevronDownIcon />
+                </span>
+            </button>
+
+            {/* Panel */}
+            {open && (
+                <div className={styles.dropdownPanel}>
+                    {/* Search (show only when lists > 5) */}
+                    {lists.length > 5 && (
+                        <div className={styles.dropdownSearch}>
+                            <input
+                                className={styles.dropdownSearchInput}
+                                placeholder="Tìm bộ từ..."
+                                value={search}
+                                onChange={e => setSearch(e.target.value)}
+                                autoFocus
+                            />
+                        </div>
+                    )}
+
+                    <div className={styles.dropdownList}>
+                        {filtered.length === 0 && (
+                            <div className={styles.dropdownEmpty}>Không tìm thấy bộ từ nào</div>
+                        )}
+                        {filtered.map((l, i) => {
+                            const isActive = l.id === selectedId;
+                            return (
+                                <button
+                                    key={l.id}
+                                    className={`${styles.dropdownItem} ${isActive ? styles.dropdownItemActive : ""}`}
+                                    onClick={() => { onSelect(l.id); setOpen(false); setSearch(""); }}
+                                >
+                                    <span className={styles.dropdownItemNo}>{i + 1}</span>
+                                    <span className={styles.dropdownItemName}>{l.name}</span>
+                                    <span className={styles.dropdownItemCount}>{l.wordCount ?? 0}</span>
+                                    {isActive && (
+                                        <span className={styles.dropdownItemCheck}><CheckIcon /></span>
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    <div className={styles.dropdownFooter}>
+                        {lists.length} bộ từ
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
 
 /* ─── Completion screen ──────────────────────────────────── */
 const CompletionScreen = ({
@@ -305,18 +394,12 @@ const HomePage = () => {
                             )}
                         </div>
 
-                        {/* List chips */}
-                        <div className={styles.chipRow}>
-                            {lists.map(l => (
-                                <ListChip
-                                    key={l.id}
-                                    name={l.name}
-                                    count={l.wordCount ?? 0}
-                                    active={l.id === selectedListId}
-                                    onClick={() => handleSelectList(l.id)}
-                                />
-                            ))}
-                        </div>
+                        {/* List selector dropdown */}
+                        <ListSelector
+                            lists={lists}
+                            selectedId={selectedListId}
+                            onSelect={handleSelectList}
+                        />
                     </div>
 
                     {/* No list selected */}
