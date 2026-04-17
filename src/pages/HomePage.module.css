@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+/* ── Page ────────────────────────────────────────────────── */
 .page {
     min-height: calc(100vh - 64px);
     display: flex;
     flex-direction: column;
     align-items: center;
     background: linear-gradient(160deg, #f0f5f0 0%, #edf8ee 50%, #f0f8f3 100%);
-    padding: 40px 20px 60px;
+    padding: 40px 20px 80px;
     font-family: 'Inter', sans-serif;
 }
 
@@ -43,18 +44,16 @@
     line-height: 1.2;
 }
 
-.cardCount {
+.roundBadge {
     background: #ffffff;
-    border: 1.5px solid #c3dbc6;
+    border: 1.5px solid #a8d4ac;
     border-radius: 10px;
-    padding: 8px 16px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #6b9b6f;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #3f6645;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* ── List chip selector ───────────────────────────────────── */
@@ -67,7 +66,7 @@
 .chip {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 6px;
     padding: 7px 14px;
     border-radius: 99px;
     border: 1.5px solid #c3dbc6;
@@ -77,15 +76,11 @@
     font-weight: 600;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
-    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s, color 0.15s;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
     white-space: nowrap;
 }
 
-.chip:hover {
-    border-color: #6b9b6f;
-    background: #f0f7f1;
-    color: #3f6645;
-}
+.chip:hover { border-color: #6b9b6f; background: #f0f7f1; }
 
 .chipActive {
     background: linear-gradient(135deg, #6b9b6f, #3f6645);
@@ -94,10 +89,7 @@
     box-shadow: 0 3px 12px rgba(107, 155, 111, 0.30);
 }
 
-.chipActive:hover {
-    background: linear-gradient(135deg, #6b9b6f, #3f6645);
-    color: #ffffff;
-}
+.chipActive:hover { background: linear-gradient(135deg, #6b9b6f, #3f6645); color: #ffffff; }
 
 .chipName {
     max-width: 140px;
@@ -109,15 +101,17 @@
 .chipCount {
     font-size: 11px;
     font-weight: 700;
-    opacity: 0.75;
-    background: rgba(255,255,255,0.2);
+    opacity: 0.7;
+    background: rgba(0,0,0,0.06);
     border-radius: 99px;
     padding: 1px 6px;
 }
 
-.chipActive .chipCount {
-    background: rgba(255,255,255,0.25);
-    opacity: 1;
+.chipActive .chipCount { background: rgba(255,255,255,0.2); opacity: 1; }
+
+.chipProgress {
+    font-size: 9px;
+    color: #6b9b6f;
 }
 
 /* ── States ──────────────────────────────────────────────── */
@@ -154,61 +148,150 @@
 
 .emptyIcon { font-size: 52px; }
 
-.emptyTitle {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 800;
-    color: #1a2e1c;
+.emptyTitle { margin: 0; font-size: 22px; font-weight: 800; color: #1a2e1c; }
+
+.emptyText { margin: 0 0 8px; font-size: 14px; color: #7a9b80; line-height: 1.6; }
+
+/* ── Select prompt (no list chosen yet) ──────────────────── */
+.selectPrompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 60px 24px;
+    color: #9ca3af;
+    text-align: center;
 }
 
-.emptyText {
-    margin: 0 0 8px;
-    font-size: 14px;
-    color: #7a9b80;
-    line-height: 1.6;
+.selectPromptIcon { font-size: 40px; animation: bounce 1.5s ease-in-out infinite; }
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
 }
+
+.selectPromptText { font-size: 15px; font-weight: 500; color: #6b7280; }
+
+/* ── Start screen ────────────────────────────────────────── */
+.startScreen {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.startIcon { font-size: 56px; animation: float 3s ease-in-out infinite; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50%       { transform: translateY(-10px) rotate(3deg); }
+}
+
+.startTitle { margin: 0; font-size: 24px; font-weight: 800; color: #1a2e1c; text-align: center; }
+
+.startSub { margin: 0; font-size: 14px; color: #6b7280; }
+
+.startActions { width: 100%; display: flex; justify-content: center; }
+
+/* ── Resume card ─────────────────────────────────────────── */
+.resumeCard {
+    width: 100%;
+    background: linear-gradient(135deg, #eaf3eb, #f0f8f0);
+    border: 1.5px solid #a8d4ac;
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: fadeSlideIn 0.3s ease;
+}
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.resumeInfo { display: flex; align-items: center; gap: 12px; }
+
+.resumeIcon { font-size: 28px; }
+
+.resumeTitle { margin: 0 0 2px; font-size: 13px; font-weight: 700; color: #1a2e1c; }
+
+.resumeSub { margin: 0; font-size: 12px; color: #3f6645; }
+
+/* ── Study meta (known/skip counts) ──────────────────────── */
+.studyMeta {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.metaKnown { color: #16a34a; }
+.metaSkip  { color: #dc2626; }
 
 /* ── Completion screen ───────────────────────────────────── */
 .completion {
     width: 100%;
-    max-width: 680px;
+    max-width: 520px;
     background: #ffffff;
-    border-radius: 20px;
+    border-radius: 24px;
     box-shadow: 0 4px 32px rgba(107, 155, 111, 0.10);
-    border: 1.5px solid #c3dbc6;
-    padding: 60px 40px;
+    border: 1.5px solid #e8e8f0;
+    padding: 48px 40px;
     text-align: center;
+    animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.completionEmoji {
-    font-size: 56px;
-    margin-bottom: 20px;
+@keyframes scaleIn {
+    from { transform: scale(0.92); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
 }
 
-.completionTitle {
-    margin: 0 0 12px;
-    font-size: 28px;
-    font-weight: 800;
-    color: #1a2e1c;
-}
+.completionEmoji { font-size: 56px; margin-bottom: 16px; }
 
-.completionText {
-    margin: 0 0 32px;
-    font-size: 15px;
-    color: #7a9b80;
-    line-height: 1.6;
-}
+.completionTitle { margin: 0 0 24px; font-size: 24px; font-weight: 800; color: #1a1a2e; }
 
-.completionHighlight {
-    color: #6b9b6f;
-    font-weight: 700;
-}
-
-.completionActions {
+.completionStats {
     display: flex;
     gap: 12px;
     justify-content: center;
+    margin-bottom: 24px;
     flex-wrap: wrap;
+}
+
+.statItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    border-radius: 14px;
+    padding: 12px 20px;
+    min-width: 80px;
+    border: 1.5px solid transparent;
+}
+
+.statKnow    { background: #f0faf1; border-color: #86efac; }
+.statSkip    { background: #fff0f0; border-color: #fca5a5; }
+.statPercent { background: #f0f5ff; border-color: #c7d2fe; }
+
+.statNum { font-size: 26px; font-weight: 800; color: #1a1a2e; }
+
+.statLabel { font-size: 11px; font-weight: 600; color: #6b7280; }
+
+.completionText { margin: 0 0 28px; font-size: 14px; color: #6b7280; line-height: 1.6; }
+
+.completionActions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
 }
 
 /* ── Buttons ─────────────────────────────────────────────── */
@@ -224,6 +307,7 @@
     box-shadow: 0 4px 20px rgba(107, 155, 111, 0.35);
     transition: transform 0.15s, box-shadow 0.15s;
     font-family: 'Inter', sans-serif;
+    white-space: nowrap;
 }
 
 .btnPrimary:hover {
@@ -242,237 +326,45 @@
     cursor: pointer;
     transition: transform 0.15s, background 0.15s;
     font-family: 'Inter', sans-serif;
+    white-space: nowrap;
 }
 
-.btnOutline:hover {
-    background: #f0f7f1;
-    border-color: #6b9b6f;
-    transform: scale(1.04);
-}
+.btnOutline:hover { background: #f0f7f1; transform: scale(1.04); }
 
-/* ── Dot indicators ──────────────────────────────────────── */
-.dots {
-    display: flex;
-    gap: 6px;
-    margin-top: 28px;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: 680px;
-}
-
-.dot {
-    height: 8px;
+.btnGhost {
+    padding: 8px 20px;
     border-radius: 99px;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    transition: all 0.3s ease;
-}
-
-.dot.dotActive {
-    width: 24px;
-    background: linear-gradient(90deg, #6b9b6f, #3f6645);
-}
-
-.dot.dotPassed {
-    width: 8px;
-    background: #a8d4ac;
-}
-
-.dot.dotUpcoming {
-    width: 8px;
-    background: #d4e8d6;
-}
-
-/* ── Header ──────────────────────────────────────────────── */
-.header {
-    width: 100%;
-    max-width: 680px;
-    margin-bottom: 32px;
-}
-
-.headerTop {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.sectionLabel {
-    margin: 0 0 4px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #3f6645;
-}
-
-.title {
-    margin: 0;
-    font-size: clamp(20px, 4vw, 28px);
-    font-weight: 800;
-    color: #1a1a2e;
-    line-height: 1.2;
-}
-
-.cardCount {
-    background: #ffffff;
-    border: 1.5px solid #e8e8f0;
-    border-radius: 10px;
-    padding: 8px 16px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #6b9b6f;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-/* ── Mode tabs ───────────────────────────────────────────── */
-.tabs {
-    display: flex;
-    gap: 4px;
-    margin-top: 20px;
-    border-bottom: 2px solid #e8e8f0;
-}
-
-.tab {
-    padding: 10px 18px;
-    border-radius: 8px 8px 0 0;
     border: none;
     background: transparent;
-    color: #6b7280;
+    color: #9ca3af;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    transition: color 0.2s;
+    transition: color 0.15s;
     font-family: 'Inter', sans-serif;
 }
 
-.tab.activeTab {
-    background: #ffffff;
-    color: #6b9b6f;
-    font-weight: 700;
-    border-bottom-color: #6b9b6f;
-}
-
-.tab:hover:not(.activeTab) {
-    color: #6b9b6f;
-}
-
-/* ── Completion screen ───────────────────────────────────── */
-.completion {
-    width: 100%;
-    max-width: 680px;
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 4px 32px rgba(107, 155, 111, 0.1);
-    border: 1.5px solid #e8e8f0;
-    padding: 60px 40px;
-    text-align: center;
-}
-
-.completionEmoji {
-    font-size: 56px;
-    margin-bottom: 20px;
-}
-
-.completionTitle {
-    margin: 0 0 12px;
-    font-size: 28px;
-    font-weight: 800;
-    color: #1a1a2e;
-}
-
-.completionText {
-    margin: 0 0 32px;
-    font-size: 15px;
-    color: #6b7280;
-    line-height: 1.6;
-}
-
-.completionHighlight {
-    color: #6b9b6f;
-    font-weight: 700;
-}
-
-.completionActions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.btnPrimary {
-    padding: 14px 36px;
-    border-radius: 99px;
-    border: none;
-    background: linear-gradient(135deg, #6b9b6f, #3f6645);
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 4px 20px rgba(107, 155, 111, 0.35);
-    transition: transform 0.15s, box-shadow 0.15s;
-    font-family: 'Inter', sans-serif;
-}
-
-.btnPrimary:hover {
-    transform: scale(1.04);
-    box-shadow: 0 6px 28px rgba(107, 155, 111, 0.45);
-}
-
-.btnOutline {
-    padding: 14px 36px;
-    border-radius: 99px;
-    border: 2px solid #6b9b6f;
-    background: #ffffff;
-    color: #6b9b6f;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.15s, background 0.15s;
-    font-family: 'Inter', sans-serif;
-}
-
-.btnOutline:hover {
-    background: #f0f5f0;
-    transform: scale(1.04);
-}
+.btnGhost:hover { color: #6b9b6f; }
 
 /* ── Dot indicators ──────────────────────────────────────── */
 .dots {
     display: flex;
-    gap: 6px;
-    margin-top: 28px;
+    gap: 5px;
+    margin-top: 20px;
     align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 680px;
 }
 
 .dot {
     height: 8px;
     border-radius: 99px;
-    border: none;
-    cursor: pointer;
-    padding: 0;
     transition: all 0.3s ease;
-    background: #e0e0ed;
+    flex-shrink: 0;
 }
 
-.dot.dotActive {
-    width: 24px;
-    background: linear-gradient(90deg, #6b9b6f, #3f6645);
-}
-
-.dot.dotPassed {
-    width: 8px;
-    background: #93c49a;
-}
-
-.dot.dotUpcoming {
-    width: 8px;
-    background: #e0e0ed;
-}
+.dotActive  { width: 24px; background: linear-gradient(90deg, #6b9b6f, #3f6645); }
+.dotKnown   { width: 8px;  background: #86efac; }
+.dotSkip    { width: 8px;  background: #fca5a5; }
+.dotUpcoming{ width: 8px;  background: #e0e0ed; }

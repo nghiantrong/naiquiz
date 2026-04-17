@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 /* ── Wrapper ─────────────────────────────────────────────── */
 .wrapper {
@@ -43,11 +43,17 @@
     width: 100%;
     height: 340px;
     perspective: 1200px;
-    cursor: pointer;
     user-select: none;
+    cursor: pointer;
+    position: relative;
 }
 
-/* ── Card inner (rotates) ────────────────────────────────── */
+/* In swipe mode, card itself handles cursor */
+.sceneSwipe {
+    cursor: grab;
+}
+
+/* ── Card inner (rotates on flip) ────────────────────────── */
 .cardInner {
     position: relative;
     width: 100%;
@@ -64,7 +70,7 @@
 .face {
     position: absolute;
     inset: 0;
-    border-radius: 16px;
+    border-radius: 20px;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     display: flex;
@@ -91,26 +97,6 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #b0b0c8;
-}
-
-.starBtn {
-    position: absolute;
-    top: 14px;
-    right: 18px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    color: #b0b0c8;
-    padding: 6px;
-    border-radius: 6px;
-    transition: color 0.2s, transform 0.15s;
-    line-height: 1;
-}
-
-.starBtn:hover {
-    color: #f59e0b;
-    transform: scale(1.15);
 }
 
 .term {
@@ -152,7 +138,38 @@
     margin: 0;
 }
 
-/* ── Navigation controls ─────────────────────────────────── */
+/* ── Swipe labels (overlay on card) ─────────────────────── */
+.swipeLabel {
+    position: absolute;
+    top: 24px;
+    z-index: 10;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    padding: 6px 20px;
+    border-radius: 10px;
+    border: 3px solid currentColor;
+    pointer-events: none;
+    text-transform: uppercase;
+    transform: rotate(-12deg);
+    transition: opacity 0.1s;
+}
+
+.swipeLabelKnow {
+    right: 28px;
+    color: #16a34a;
+    background: rgba(220, 252, 231, 0.9);
+    transform: rotate(12deg);
+}
+
+.swipeLabelSkip {
+    left: 28px;
+    color: #dc2626;
+    background: rgba(254, 226, 226, 0.9);
+    transform: rotate(-12deg);
+}
+
+/* ── Navigation controls (simple mode) ──────────────────── */
 .controls {
     display: flex;
     align-items: center;
@@ -190,8 +207,69 @@
     cursor: not-allowed;
 }
 
+/* ── Swipe mode controls ─────────────────────────────────── */
+.swipeControls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 28px;
+}
+
+.swipeBtn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+}
+
+.swipeBtn span {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.swipeBtnSkip {
+    background: #fff0f0;
+    color: #dc2626;
+    border: 2px solid #fca5a5;
+    box-shadow: 0 2px 12px rgba(220, 38, 38, 0.12);
+}
+
+.swipeBtnSkip:hover {
+    background: #dc2626;
+    color: #ffffff;
+    transform: scale(1.1) translateX(-4px);
+    box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3);
+}
+
+.swipeBtnKnow {
+    background: #f0faf1;
+    color: #16a34a;
+    border: 2px solid #86efac;
+    box-shadow: 0 2px 12px rgba(22, 163, 74, 0.12);
+}
+
+.swipeBtnKnow:hover {
+    background: #16a34a;
+    color: #ffffff;
+    transform: scale(1.1) translateX(4px);
+    box-shadow: 0 4px 20px rgba(22, 163, 74, 0.3);
+}
+
+/* ── Shared flip button ──────────────────────────────────── */
 .flipBtn {
-    padding: 12px 32px;
+    padding: 12px 28px;
     border-radius: 99px;
     border: none;
     background: linear-gradient(135deg, #6b9b6f, #3f6645);
@@ -215,7 +293,7 @@
 /* ── Keyboard hint ───────────────────────────────────────── */
 .keyboardHint {
     text-align: center;
-    margin-top: 16px;
+    margin-top: 14px;
     font-size: 12px;
     color: #b0b0c8;
 }
